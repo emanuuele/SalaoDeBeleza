@@ -1,6 +1,6 @@
-package controller;
+package model;
 
-public class Cliente extends Pessoa implements BaseController{
+public class Cliente extends Pessoa implements BaseModel{
 
 	private int id;
 	private Agendamento[] meusAgendamentos;

@@ -1,6 +1,6 @@
-package controller;
+package model;
 
-public class Funcionario extends Pessoa implements BaseController {
+public class Funcionario extends Pessoa implements BaseModel {
 	
 	private int id;
 	private boolean ehGerente;

@@ -1,6 +1,6 @@
-package controller;
+package model;
 
-public interface BaseController {
+public interface BaseModel {
 	public void salvar();
 	public void deletar();
 	public void editar();

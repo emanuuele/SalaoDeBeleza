@@ -1,8 +1,8 @@
-package controller;
+package model;
 
 import java.util.Date;
 
-public class Agendamento implements BaseController{
+public class Agendamento implements BaseModel{
 	private int id;
 	private Date data;
 	private int id_cliente;
