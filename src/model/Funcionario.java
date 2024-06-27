@@ -1,18 +1,21 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Funcionario extends Pessoa implements BaseModel {
 	
 	private int id;
 	private boolean ehGerente;
 	private int id_cargo;
-	private Agendamento[] atendimentosFuncionario;
+	private ArrayList<Agendamento> atendimentosFuncionario;
+	ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>(); 
 	
 	public Funcionario(String nome, String usuario, String celular, String senha, char tipo, int id, boolean ehGerente, int id_cargo) {
 		super(nome, usuario, celular, senha, tipo);
 		this.id=id;
 		this.id_cargo = id_cargo;
 		this.ehGerente = ehGerente;
-		this.setAtendimentosFuncionario(new Agendamento().atendimentosFuncionario(id));
+		setAtendimentosFuncionario(id);
 	}
 	public int getId() {
 		return id;
@@ -34,23 +37,34 @@ public class Funcionario extends Pessoa implements BaseModel {
 	}
 	@Override
 	public void salvar() {
-		
+		funcionarios.add(this);
 	}
 	@Override
-	public void deletar() {
-		
+	public void deletar(int id) {
+        funcionarios.removeIf(servico -> servico.id == id);
 	}
 	@Override
-	public void editar() {
-		
+	public void editar(int id) {
+		for(int i = 0; i < funcionarios.size(); i++) {
+			Funcionario funcionario = funcionarios.get(i);
+			if(funcionario.id == id) {
+				funcionario.setCelular(this.getCelular());
+				funcionario.setNome(this.getNome());
+				funcionario.setSenha(this.getSenha());
+				funcionario.setUsuario(this.getUsuario());
+				funcionarios.set(i, funcionario);
+				break;
+			}
+		}
 	}
-	public Agendamento[] getAtendimentosFuncionario() {
+	
+	public ArrayList<Agendamento> getAtendimentosFuncionario() {
 		return atendimentosFuncionario;
 	}
-	public void setAtendimentosFuncionario(Agendamento[] atendimentosFuncionario) {
-		this.atendimentosFuncionario = atendimentosFuncionario;
+	public void setAtendimentosFuncionario(int id) {
+		this.atendimentosFuncionario = new Agendamento().atendimentosFuncionario(id);
 	}
-	public Funcionario[] listarFincionarios() {
+	public Funcionario[] listarFuncionarios() {
 		return null;
 	}
 }

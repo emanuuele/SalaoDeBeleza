@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Agendamento implements BaseModel{
@@ -8,6 +9,7 @@ public class Agendamento implements BaseModel{
 	private int id_cliente;
 	private int id_funcionario;
 	private int id_servico;
+	ArrayList<Agendamento> agendamentos = new ArrayList<Agendamento>(); 
 	public int getId() {
 		return id;
 	}
@@ -50,27 +52,34 @@ public class Agendamento implements BaseModel{
 
 	@Override
 	public void salvar() {
-		// TODO Auto-generated method stub
-		
+		agendamentos.add(this);
 	}
 
 	@Override
-	public void deletar() {
-		// TODO Auto-generated method stub
-		
+	public void deletar(int id) {
+        agendamentos.removeIf(servico -> servico.id == id);
 	}
 
 	@Override
-	public void editar() {
-		// TODO Auto-generated method stub
-		
+	public void editar(int id) {
+		for(int i = 0; i < agendamentos.size(); i++) {
+			Agendamento agendamento = agendamentos.get(i);
+			if(agendamento.id == id) {
+				agendamento.setData(this.getData());
+				agendamento.setId_cliente(this.getId_cliente());
+				agendamento.setId_funcionario(this.getId_funcionario());
+				agendamento.setId_servico(this.getId_servico());
+				agendamentos.set(i, agendamento);
+				break;
+			}
+		}
 	}
 	
-	public Agendamento[] agendamentosCliente(int id_cliente) {
+	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) {
 		return null;
 	}
 	
-	public Agendamento[] atendimentosFuncionario(int id_funcionario) {
+	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) {
 		return null;
 	}
 }

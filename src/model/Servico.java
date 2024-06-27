@@ -1,11 +1,14 @@
 package model;
 
-public class Servico {
+import java.util.ArrayList;
+
+public class Servico implements BaseModel{
 	private int id;
 	private double valor;
 	private String nome;
 	private int tempo;
 	private int id_cargo;
+	ArrayList<Servico> servicos = new ArrayList<Servico>();
 	public Servico(int id, double valor, String nome, int tempo, int id_cargo) {
 		this.id = id;
 		this.id_cargo = id_cargo;
@@ -45,5 +48,27 @@ public class Servico {
 	}
 	public Servico[] listarServicos() {
 		return null;
+	}
+	@Override
+	public void salvar() {
+		servicos.add(this);
+	}
+	@Override
+	public void deletar(int id) {
+        servicos.removeIf(servico -> servico.id == id);
+	}
+	@Override
+	public void editar(int id) {
+		for(int i = 0; i < servicos.size(); i++) {
+			Servico servico = servicos.get(i);
+			if(servico.id == id) {
+				servico.setId_cargo(this.getId_cargo());
+				servico.setNome(this.getNome());
+				servico.setTempo(this.getTempo());
+				servico.setValor(this.getValor());
+				servicos.set(i, servico);
+				break;
+			}
+		}
 	}
 }

@@ -2,6 +2,6 @@ package model;
 
 public interface BaseModel {
 	public void salvar();
-	public void deletar();
-	public void editar();
+	public void deletar(int id);
+	public void editar(int id);
 }
