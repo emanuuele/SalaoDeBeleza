@@ -55,13 +55,13 @@ public class Servico implements BaseModel{
 	}
 	@Override
 	public void deletar(int id) {
-        servicos.removeIf(servico -> servico.id == id);
+        servicos.removeIf(servico -> servico.getId() == id);
 	}
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < servicos.size(); i++) {
 			Servico servico = servicos.get(i);
-			if(servico.id == id) {
+			if(servico.getId() == id) {
 				servico.setId_cargo(this.getId_cargo());
 				servico.setNome(this.getNome());
 				servico.setTempo(this.getTempo());

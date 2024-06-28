@@ -25,13 +25,13 @@ public class Cliente extends Pessoa implements BaseModel{
 	}
 	@Override
 	public void deletar(int id) {
-        clientes.removeIf(servico -> servico.id == id);
+        clientes.removeIf(servico -> servico.getId() == id);
 	}
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < clientes.size(); i++) {
 			Cliente cliente = clientes.get(i);
-			if(cliente.id == id) {
+			if(cliente.getId() == id) {
 				cliente.setCelular(this.getCelular());
 				cliente.setNome(this.getNome());
 				cliente.setSenha(this.getSenha());

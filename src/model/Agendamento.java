@@ -57,14 +57,14 @@ public class Agendamento implements BaseModel{
 
 	@Override
 	public void deletar(int id) {
-        agendamentos.removeIf(servico -> servico.id == id);
+        agendamentos.removeIf(servico -> servico.getId() == id);
 	}
 
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < agendamentos.size(); i++) {
 			Agendamento agendamento = agendamentos.get(i);
-			if(agendamento.id == id) {
+			if(agendamento.getId() == id) {
 				agendamento.setData(this.getData());
 				agendamento.setId_cliente(this.getId_cliente());
 				agendamento.setId_funcionario(this.getId_funcionario());
@@ -76,10 +76,24 @@ public class Agendamento implements BaseModel{
 	}
 	
 	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) {
-		return null;
+		ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
+		for(int i = 0; i < agendamentos.size(); i++) {
+			Agendamento agendamento = agendamentos.get(i);
+			if(agendamento.getId_cliente() == id_cliente) {
+				meusAgendamentos.add(agendamento);
+			}
+		}
+		return meusAgendamentos;
 	}
 	
 	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) {
-		return null;
+		ArrayList<Agendamento> meusAtendimentos = new ArrayList<Agendamento>();
+		for (int i=0; i<agendamentos.size(); i++) {
+			Agendamento agendamento = agendamentos.get(i);
+			if(agendamento.getId_funcionario() == id_funcionario) {
+				meusAtendimentos.add(agendamento);
+			}
+		} 
+		return meusAtendimentos;
 	}
 }
