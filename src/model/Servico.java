@@ -16,6 +16,9 @@ public class Servico implements BaseModel{
 		this.nome = nome;
 		this.tempo = tempo;
 	}
+	public Servico() {
+
+	}
 	public int getId() {
 		return id;
 	}
@@ -49,19 +52,27 @@ public class Servico implements BaseModel{
 	public Servico[] listarServicos() {
 		return null;
 	}
+	public Servico encontrarServicoPorId(int id) {
+	    for (Servico servico : servicos) {
+	        if (servico.getId() == id) {
+	            return servico;
+	        }
+	    }
+	    return null;
+	}
 	@Override
 	public void salvar() {
 		servicos.add(this);
 	}
 	@Override
 	public void deletar(int id) {
-        servicos.removeIf(servico -> servico.id == id);
+        servicos.removeIf(servico -> servico.getId() == id);
 	}
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < servicos.size(); i++) {
 			Servico servico = servicos.get(i);
-			if(servico.id == id) {
+			if(servico.getId() == id) {
 				servico.setId_cargo(this.getId_cargo());
 				servico.setNome(this.getNome());
 				servico.setTempo(this.getTempo());

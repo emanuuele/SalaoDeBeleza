@@ -14,6 +14,9 @@ public class Pessoa {
 		this.senha=senha;
 		this.tipo=tipo;
 	}
+	public Pessoa() {
+		
+	}
 	public String getNome() {
 		return nome;
 	}

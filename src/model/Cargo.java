@@ -36,7 +36,7 @@ public class Cargo implements BaseModel{
 	}
 	@Override
 	public void deletar(int id) {
-        cargos.removeIf(servico -> servico.id == id);
+        cargos.removeIf(servico -> servico.getId() == id);
 	}
 	@Override
 	public void editar(int id) {

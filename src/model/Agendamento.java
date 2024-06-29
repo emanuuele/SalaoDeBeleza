@@ -10,6 +10,9 @@ public class Agendamento implements BaseModel{
 	private int id_funcionario;
 	private int id_servico;
 	ArrayList<Agendamento> agendamentos = new ArrayList<Agendamento>(); 
+	Cliente clienteModel = new Cliente();
+	Funcionario funcionarioModel = new Funcionario();
+	Servico servicoModel = new Servico();
 	public int getId() {
 		return id;
 	}
@@ -42,6 +45,18 @@ public class Agendamento implements BaseModel{
 		this.id_funcionario = id_funcionario;
 	}
 
+	public String getNomeCliente(int id_cliente) {
+		return clienteModel.encontrarClientePorId(id_cliente).getNome();
+	}
+	
+	public String getNomeFuncionario(int id_funcionario) {
+		return funcionarioModel.encontrarFuncionarioPorId(id_funcionario).getNome();
+	}
+	
+	public String getNomeServico(int id_servico) {
+		return servicoModel.encontrarServicoPorId(id_servico).getNome();
+	}
+	
 	public int getId_servico() {
 		return id_servico;
 	}
@@ -57,14 +72,14 @@ public class Agendamento implements BaseModel{
 
 	@Override
 	public void deletar(int id) {
-        agendamentos.removeIf(servico -> servico.id == id);
+        agendamentos.removeIf(servico -> servico.getId() == id);
 	}
 
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < agendamentos.size(); i++) {
 			Agendamento agendamento = agendamentos.get(i);
-			if(agendamento.id == id) {
+			if(agendamento.getId() == id) {
 				agendamento.setData(this.getData());
 				agendamento.setId_cliente(this.getId_cliente());
 				agendamento.setId_funcionario(this.getId_funcionario());
@@ -76,10 +91,24 @@ public class Agendamento implements BaseModel{
 	}
 	
 	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) {
-		return null;
+		ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
+		for(int i = 0; i < agendamentos.size(); i++) {
+			Agendamento agendamento = agendamentos.get(i);
+			if(agendamento.getId_cliente() == id_cliente) {
+				meusAgendamentos.add(agendamento);
+			}
+		}
+		return meusAgendamentos;
 	}
 	
 	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) {
-		return null;
+		ArrayList<Agendamento> meusAtendimentos = new ArrayList<Agendamento>();
+		for (int i=0; i<agendamentos.size(); i++) {
+			Agendamento agendamento = agendamentos.get(i);
+			if(agendamento.getId_funcionario() == id_funcionario) {
+				meusAtendimentos.add(agendamento);
+			}
+		} 
+		return meusAtendimentos;
 	}
 }

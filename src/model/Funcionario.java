@@ -17,6 +17,17 @@ public class Funcionario extends Pessoa implements BaseModel {
 		this.ehGerente = ehGerente;
 		setAtendimentosFuncionario(id);
 	}
+	public Funcionario() {
+		
+	}
+	public Funcionario encontrarFuncionarioPorId(int id) {
+	    for (Funcionario fun : funcionarios) {
+	        if (fun.getId() == id) {
+	            return fun;
+	        }
+	    }
+	    return null;
+	}
 	public int getId() {
 		return id;
 	}
@@ -41,13 +52,13 @@ public class Funcionario extends Pessoa implements BaseModel {
 	}
 	@Override
 	public void deletar(int id) {
-        funcionarios.removeIf(servico -> servico.id == id);
+        funcionarios.removeIf(servico -> servico.getId() == id);
 	}
 	@Override
 	public void editar(int id) {
 		for(int i = 0; i < funcionarios.size(); i++) {
 			Funcionario funcionario = funcionarios.get(i);
-			if(funcionario.id == id) {
+			if(funcionario.getId() == id) {
 				funcionario.setCelular(this.getCelular());
 				funcionario.setNome(this.getNome());
 				funcionario.setSenha(this.getSenha());
@@ -64,7 +75,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 	public void setAtendimentosFuncionario(int id) {
 		this.atendimentosFuncionario = new Agendamento().atendimentosFuncionario(id);
 	}
-	public Funcionario[] listarFuncionarios() {
-		return null;
+	public ArrayList<Funcionario> listarFuncionarios() {
+		return funcionarios;
 	}
 }
