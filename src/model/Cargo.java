@@ -12,6 +12,8 @@ public class Cargo implements BaseModel{
 		this.id=id;
 		this.id_serviço=id_serviço;
 	}
+	public Cargo() {
+	}
 	public String getNome() {
 		return nome;
 	}
@@ -40,8 +42,29 @@ public class Cargo implements BaseModel{
 	}
 	@Override
 	public void editar(int id) {
-		
-	}
+        for (int i = 0; i < cargos.size(); i++) {
+            Cargo cargo = cargos.get(i);
+            if (cargo.getId() == id) {
+                cargo.setNome(this.getNome());
+                cargo.setId_serviço(this.getId_serviço());
+                cargos.set(i, cargo);
+                break;
+            }
+        }
+    }
+
+	public Cargo encontrarCargoPorId(int id) {
+        for (Cargo cargo : cargos) {
+            if (cargo.getId() == id) {
+                return cargo;
+            }
+        }
+        return null;
+    }
+	
+	public ArrayList<Cargo> listarServicos() {
+        return cargos;
+    }
 
 
 }

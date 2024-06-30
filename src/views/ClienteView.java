@@ -1,7 +1,8 @@
 package views;
 
-public class ClienteView {
-	public String home() {
+public class ClienteView extends Menus{
+	@Override
+	public String home(int id) {
 		String menu = "";
 		menu = menu + "Home Cliente";
 		menu+="\n 1-Agendar horário";

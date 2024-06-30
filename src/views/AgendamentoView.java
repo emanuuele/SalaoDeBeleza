@@ -1,6 +1,5 @@
 package views;
 
-
 import java.util.ArrayList;
 
 import model.Agendamento;
@@ -13,7 +12,7 @@ public class AgendamentoView {
 		Agendamento atendimento = new Agendamento();
 		ArrayList<Agendamento> atendimentos = atendimento.atendimentosFuncionario(id);
 		for(Agendamento evento : atendimentos) {
-			String.format("%-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(), evento.getNomeCliente(evento.getId_cliente()), evento.getNomeFuncionario(evento.getId_funcionario()), evento.getNomeServico(evento.getId_servico()));
+			lista.add(String.format("%-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(), evento.getNomeCliente(evento.getId_cliente()), evento.getNomeFuncionario(evento.getId_funcionario()), evento.getNomeServico(evento.getId_servico())));
 		}
 		return lista;
 	}
@@ -24,7 +23,7 @@ public class AgendamentoView {
 		Agendamento atendimento = new Agendamento();
 		ArrayList<Agendamento> atendimentos = atendimento.agendamentosCliente(id);
 		for(Agendamento evento : atendimentos) {
-			String.format("%-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(), evento.getNomeCliente(evento.getId_cliente()), evento.getNomeFuncionario(evento.getId_funcionario()), evento.getNomeServico(evento.getId_servico()));
+			lista.add(String.format("\n %-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(), evento.getNomeCliente(evento.getId_cliente()), evento.getNomeFuncionario(evento.getId_funcionario()), evento.getNomeServico(evento.getId_servico())));
 		}
 		return lista;
 	}

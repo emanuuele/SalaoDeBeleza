@@ -60,4 +60,8 @@ public class Cliente extends Pessoa implements BaseModel{
 	public void setMeusAgendamentos(int id) {
 		this.meusAgendamentos = new Agendamento().agendamentosCliente(id);
 	}
+	
+	public ArrayList<Cliente> listarClientes(){
+		return clientes;
+	}
 }
