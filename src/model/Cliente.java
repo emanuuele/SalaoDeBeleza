@@ -25,6 +25,14 @@ public class Cliente extends Pessoa implements BaseModel{
 	    }
 	    return null;
 	}
+	public Cliente encontrarClientePorUsuario(String usuario) {
+	    for (Cliente cli : clientes) {
+	        if (cli.getUsuario() == usuario) {
+	            return cli;
+	        }
+	    }
+	    return null;
+	}
 	public int getId() {
 		return id;
 	}

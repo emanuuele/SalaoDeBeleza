@@ -78,4 +78,12 @@ public class Funcionario extends Pessoa implements BaseModel {
 	public ArrayList<Funcionario> listarFuncionarios() {
 		return funcionarios;
 	}
+	public Funcionario encontrarFuncionarioPorUsuario(String usuario) {
+	    for (Funcionario fun : funcionarios) {
+	        if (fun.getUsuario() == usuario) {
+	            return fun;
+	        }
+	    }
+	    return null;
+	}
 }
