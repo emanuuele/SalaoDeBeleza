@@ -37,7 +37,7 @@ public class Cliente extends Pessoa implements BaseModel{
 	        return null;
 	    }
 	}
-	
+
 	public static Cliente getClientePorUsuario(String usuario) throws Exception {
 	    try {
 	        String sql = "SELECT * FROM Cliente WHERE usuario = ?";
