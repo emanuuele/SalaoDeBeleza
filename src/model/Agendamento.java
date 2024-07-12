@@ -1,15 +1,16 @@
 package model;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Agendamento implements BaseModel{
 	private int id;
-	private Date data;
+	private String data;
 	private int id_cliente;
 	private int id_funcionario;
 	private int id_servico;
-	ArrayList<Agendamento> agendamentos = new ArrayList<Agendamento>(); 
 	Cliente clienteModel = new Cliente();
 	Funcionario funcionarioModel = new Funcionario();
 	Servico servicoModel = new Servico();
@@ -21,11 +22,11 @@ public class Agendamento implements BaseModel{
 		this.id = id;
 	}
 
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 
@@ -45,12 +46,12 @@ public class Agendamento implements BaseModel{
 		this.id_funcionario = id_funcionario;
 	}
 
-	public String getNomeCliente(int id_cliente) {
-		return clienteModel.encontrarClientePorId(id_cliente).getNome();
+	public String getNomeCliente(int id_cliente) throws Exception {
+		return clienteModel.getClientePorId(id_cliente).getNome();
 	}
 	
-	public String getNomeFuncionario(int id_funcionario) {
-		return funcionarioModel.encontrarFuncionarioPorId(id_funcionario).getNome();
+	public String getNomeFuncionario(int id_funcionario) throws Exception {
+		return funcionarioModel.getFuncionarioPorId(id_funcionario).getNome();
 	}
 	
 	public String getNomeServico(int id_servico) {
@@ -66,49 +67,51 @@ public class Agendamento implements BaseModel{
 	}
 
 	@Override
-	public void salvar() {
-		agendamentos.add(this);
-	}
-
-	@Override
-	public void deletar(int id) {
-        agendamentos.removeIf(servico -> servico.getId() == id);
-	}
-
-	@Override
-	public void editar(int id) {
-		for(int i = 0; i < agendamentos.size(); i++) {
-			Agendamento agendamento = agendamentos.get(i);
-			if(agendamento.getId() == id) {
-				agendamento.setData(this.getData());
-				agendamento.setId_cliente(this.getId_cliente());
-				agendamento.setId_funcionario(this.getId_funcionario());
-				agendamento.setId_servico(this.getId_servico());
-				agendamentos.set(i, agendamento);
-				break;
-			}
+	public int salvar() throws SQLException {
+		try {
+    		String sql = "INSERT INTO Agendamento (data, id_cliente, id_funcionario, id_sevico) VALUES (?, ?, ?, ?)";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setString(1, this.getData());
+        	stmt.setInt(2, this.getId_cliente());
+        	stmt.setInt(3, this.getId_funcionario());
+        	stmt.setInt(4, this.getId_servico());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
 		}
+	}
+
+	@Override
+	public int deletar(int id) throws SQLException {
+		try {
+    		String sql = "DELETE FROM Agendamento WHERE id = ?";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setInt(1, this.getId());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
+	}
+
+	@Override
+	public int editar(int id) {
+		return id;
+		
 	}
 	
 	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) {
 		ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
-		for(int i = 0; i < agendamentos.size(); i++) {
-			Agendamento agendamento = agendamentos.get(i);
-			if(agendamento.getId_cliente() == id_cliente) {
-				meusAgendamentos.add(agendamento);
-			}
-		}
+		
 		return meusAgendamentos;
 	}
 	
 	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) {
 		ArrayList<Agendamento> meusAtendimentos = new ArrayList<Agendamento>();
-		for (int i=0; i<agendamentos.size(); i++) {
-			Agendamento agendamento = agendamentos.get(i);
-			if(agendamento.getId_funcionario() == id_funcionario) {
-				meusAtendimentos.add(agendamento);
-			}
-		} 
+		
 		return meusAtendimentos;
 	}
 }

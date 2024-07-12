@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Servico implements BaseModel{
@@ -61,25 +63,48 @@ public class Servico implements BaseModel{
 	    return null;
 	}
 	@Override
-	public void salvar() {
-		servicos.add(this);
+	public int salvar() throws SQLException {
+		try {
+    		String sql = "INSERT INTO Servico (nome, id_cargo, valor, tempo) VALUES (?, ?, ?, ?, ?)";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setString(1, this.getNome());
+            stmt.setInt(2, this.getId_cargo());
+            stmt.setDouble(3, this.getValor());
+            stmt.setInt(4, this.getTempo());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
 	}
 	@Override
-	public void deletar(int id) {
-        servicos.removeIf(servico -> servico.getId() == id);
+	public int deletar(int id) throws SQLException {
+		try {
+    		String sql = "DELETE FROM Servico WHERE id = ?";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setInt(1, this.getId());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
 	}
 	@Override
-	public void editar(int id) {
-		for(int i = 0; i < servicos.size(); i++) {
-			Servico servico = servicos.get(i);
-			if(servico.getId() == id) {
-				servico.setId_cargo(this.getId_cargo());
-				servico.setNome(this.getNome());
-				servico.setTempo(this.getTempo());
-				servico.setValor(this.getValor());
-				servicos.set(i, servico);
-				break;
-			}
+	public int editar(int id) throws SQLException {
+		try {
+    		String sql = "UPDATE Servico SET nome = ?, id_cargo = ?, valor = ?, tempo = ? WHERE id = ?";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setString(1, this.getNome());
+            stmt.setInt(2, this.getId_cargo());
+            stmt.setDouble(3, this.getValor());
+            stmt.setInt(4, this.getTempo());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
 		}
 	}
 }

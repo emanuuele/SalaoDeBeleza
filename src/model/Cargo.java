@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Cargo implements BaseModel{
@@ -15,43 +17,64 @@ public class Cargo implements BaseModel{
 	public Cargo() {
 	}
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
 	public int getId_serviço() {
-		return id_serviço;
+		return this.id_serviço;
 	}
 	public void setId_serviço(int id_serviço) {
 		this.id_serviço = id_serviço;
 	}
 	@Override
-	public void salvar() {
-		cargos.add(this);
+	public int salvar() throws SQLException {
+		try {
+    		String sql = "INSERT INTO Cargo (nome) VALUES (?)";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setString(1, this.getNome());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
 	}
 	@Override
-	public void deletar(int id) {
-        cargos.removeIf(servico -> servico.getId() == id);
+	public int deletar(int id) throws SQLException {
+		try {
+    		String sql = "DELETE FROM Cargo WHERE id = ?";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setInt(1, this.getId());
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
 	}
 	@Override
-	public void editar(int id) {
-        for (int i = 0; i < cargos.size(); i++) {
-            Cargo cargo = cargos.get(i);
-            if (cargo.getId() == id) {
-                cargo.setNome(this.getNome());
-                cargo.setId_serviço(this.getId_serviço());
-                cargos.set(i, cargo);
-                break;
-            }
-        }
-    }
+	public int editar(int id) throws SQLException {
+		try {
+			String sql = "UPDATE Funcionario SET nome = ? WHERE id = ?";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setString(1, this.getNome());
+            stmt.setInt(2, id);
+
+        	return stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+			return 0;
+		}
+	}
 
 	public Cargo encontrarCargoPorId(int id) {
         for (Cargo cargo : cargos) {

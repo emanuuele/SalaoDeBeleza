@@ -101,21 +101,21 @@ public class FuncionarioView extends Menus{
 		return scan.nextInt();
 	}
 	
- 	 public void menuEditarExcluir(int id, String tipo) {
+ 	 public void menuEditarExcluir(int id, String tipo) throws Exception {
 	        try {
 	        	String opt = super.menuEditarExcluir();
 		        switch (opt) {
 				case "1": {
 					if(tipo == "F") {
 						int id_fun = this.funEscolhido("editar");
-						if(this.funcionarioModel.encontrarFuncionarioPorId(id_fun) == null) {
+						if(this.funcionarioModel.getFuncionarioPorId(id_fun) == null) {
 							throw new IllegalArgumentException("Funcionário não existe");
 						}
 						this.funcionarioModel.editar(id_fun);
 					}
 					else if(tipo == "C") {
 						int id_cliente = this.clienteEscolhido("editar");
-						if(this.clienteModel.encontrarClientePorId(id_cliente) == null) {
+						if(this.clienteModel.getClientePorId(id_cliente) == null) {
 							throw new IllegalArgumentException("Cliente não existe");
 						}
 						this.clienteModel.editar(id_cliente);
@@ -139,14 +139,14 @@ public class FuncionarioView extends Menus{
 				case "2": {
 					if(tipo == "F") {
 						int id_fun = this.funEscolhido("excluir");
-						if(this.funcionarioModel.encontrarFuncionarioPorId(id_fun) == null) {
+						if(this.funcionarioModel.getFuncionarioPorId(id_fun) == null) {
 							throw new IllegalArgumentException("Funcionário não existe");
 						}
 						this.funcionarioModel.deletar(id_fun);
 					}
 					else if(tipo == "C") {
 						int id_cliente = this.clienteEscolhido("excluir");
-						if(this.clienteModel.encontrarClientePorId(id_cliente) == null) {
+						if(this.clienteModel.getClientePorId(id_cliente) == null) {
 							throw new IllegalArgumentException("Funcionário não existe");
 						}
 						this.clienteModel.deletar(id_cliente);
@@ -173,6 +173,27 @@ public class FuncionarioView extends Menus{
 				System.out.println(e);
 			}
 	 }
+ 	 
+ 	 public String cadastro() {
+ 		 String menu = "";
+ 		 Scanner scan = new Scanner(System.in);
+ 		 System.out.println("Cadastro de funcionário \n Nome: ");
+ 		 String nome = scan.next();
+ 		 System.out.println("Celular: ");
+ 		 String celular = scan.next();
+ 		 System.out.println("Gerente (S/N)");
+ 		 String gerente = scan.next();
+ 		 System.out.println("Usuário: ");
+ 		 String user = scan.next();
+ 		 boolean ehGerente = false;
+ 		 
+ 		 if(gerente.equals("S")) {
+ 			 ehGerente = true;
+ 		 }
+ 		 
+ 		 
+ 		 return null;
+ 	 }
  	 
  	 
  	 

@@ -6,7 +6,7 @@ import model.Agendamento;
 
 
 public class AgendamentoView {
-	public ArrayList<String> meusAtendimentos(int id) {
+	public ArrayList<String> meusAtendimentos(int id) throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		lista.add(String.format("%-5s %-20s %-12s %-15s %-10s%n", "ID", "Data", "Cliente", "Funcionario", "Servico"));
 		Agendamento atendimento = new Agendamento();
@@ -17,7 +17,7 @@ public class AgendamentoView {
 		return lista;
 	}
 	
-	public ArrayList<String> meusAgendamentos(int id) {
+	public ArrayList<String> meusAgendamentos(int id) throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		lista.add(String.format("%-5s %-20s %-12s %-15s %-10s%n", "ID", "Data", "Cliente", "Funcionario", "Servico"));
 		Agendamento atendimento = new Agendamento();
