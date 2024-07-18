@@ -105,8 +105,9 @@ public class FuncionarioController {
 	        LocalDateTime end_time;
 			for (int i = 0; i < horarios; i++) {
 				end_time = start_time.plus(tempo, ChronoUnit.MINUTES);
+				System.out.println("Horário: " + start_time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + '-' + end_time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
 				String sql = "select nome, id from Funcionario where id_cargo = ? and not in ("
-						+ "select id_funcionario from Agendamento where data between " + start_time + " AND " + end_time
+						+ "select id_funcionario from Agendamento where data between " + start_time.format(format) + " AND " + end_time.format(format)
 						+ "and data_final between " + start_time + " AND " + end_time
 						+ ")";
 				start_time = end_time;
