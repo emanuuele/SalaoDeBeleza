@@ -3,13 +3,22 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import model.Cargo;
 import model.Cliente;
 import model.DAO;
+import model.Funcionario;
 import model.Pessoa;
 
 public class FuncionarioController {
@@ -85,5 +94,31 @@ public class FuncionarioController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void funcionariosDisponiveis(int id_cargo,int tempo, int dia, int mes) {
+		try {
+			final int minTot = 600;
+			float horarios = Math.ceilDiv(minTot, tempo);
+	        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        LocalDateTime start_time = LocalDateTime.parse(Calendar.YEAR + "-" + mes + "-" + dia + "08:00:00", format);
+	        LocalDateTime end_time;
+			for (int i = 0; i < horarios; i++) {
+				end_time = start_time.plus(tempo, ChronoUnit.MINUTES);
+				String sql = "select nome, id from Funcionario where id_cargo = ? and not in ("
+						+ "select id_funcionario from Agendamento where data between " + start_time + " AND " + end_time
+						+ "and data_final between " + start_time + " AND " + end_time
+						+ ")";
+				start_time = end_time;
+				PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		        stmt.setInt(1, id_cargo);
+		        ResultSet rs = stmt.executeQuery();
+		        while (rs.next()) {
+		            System.out.println(rs.getInt("id") + ". " + rs.getString("nome"));
+		        }
+			}
+		} catch (Exception e) {
+			System.out.println("Ocorreu um erro: "+ e.getMessage());
+		}
 	}
 }

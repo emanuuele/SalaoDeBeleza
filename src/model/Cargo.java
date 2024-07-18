@@ -77,18 +77,18 @@ public class Cargo implements BaseModel{
 		}
 	}
 	
-	public static Funcionario encontrarCargoPorId(int id) throws Exception {
+	public static Cargo encontrarCargoPorId(int id) throws Exception {
 	    try {
 	        String sql = "SELECT * FROM Cargo WHERE id = ?";
 	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        stmt.setInt(1, id);
 	        ResultSet rs = stmt.executeQuery();
-	        Funcionario fun = new Funcionario();
+	        Cargo cargo = new Cargo();
 	        if (rs.first()) {
-	            fun.setNome(rs.getString("nome"));
-	            fun.setId(rs.getInt("id"));
+	        	cargo.setNome(rs.getString("nome"));
+	        	cargo.setId(rs.getInt("id"));
 	        }
-	        return fun;
+	        return cargo;
 	    } catch (Exception e) {
 	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;
