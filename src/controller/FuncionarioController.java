@@ -117,6 +117,12 @@ public class FuncionarioController {
 		        while (rs.next()) {
 		            System.out.println(rs.getInt("id") + ". " + rs.getString("nome"));
 		        }
+		        System.out.println("Deseja continuar? Sim/Não");
+		        Scanner scan = new Scanner(System.in);
+		        String opt = scan.next();
+		        if (!opt.toLowerCase().equals("sim")) {
+		        	break;
+		        }
 			}
 		} catch (Exception e) {
 			System.out.println("Ocorreu um erro: "+ e.getMessage());
