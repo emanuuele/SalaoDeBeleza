@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -75,15 +76,24 @@ public class Cargo implements BaseModel{
 			return 0;
 		}
 	}
-
-	public Cargo encontrarCargoPorId(int id) {
-        for (Cargo cargo : cargos) {
-            if (cargo.getId() == id) {
-                return cargo;
-            }
-        }
-        return null;
-    }
+	
+	public static Funcionario encontrarCargoPorId(int id) throws Exception {
+	    try {
+	        String sql = "SELECT * FROM Cargo WHERE id = ?";
+	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        stmt.setInt(1, id);
+	        ResultSet rs = stmt.executeQuery();
+	        Funcionario fun = new Funcionario();
+	        if (rs.first()) {
+	            fun.setNome(rs.getString("nome"));
+	            fun.setId(rs.getInt("id"));
+	        }
+	        return fun;
+	    } catch (Exception e) {
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
+	        return null;
+	    }
+	}
 	
 	public ArrayList<Cargo> listarServicos() {
         return cargos;

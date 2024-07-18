@@ -8,7 +8,10 @@ import java.util.Scanner;
 
 import model.Cliente;
 import model.Funcionario;
+import model.LoggedUser;
 import model.Pessoa;
+import views.ClienteView;
+import views.FuncionarioView;
 
 public class Login {
 	public static void login() throws Exception {
@@ -23,10 +26,20 @@ public class Login {
 			byte[] hash1 = cript.digest(senha.getBytes(StandardCharsets.UTF_8));
 			if(pessoa != null) {
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
-					System.out.println("logou");
+					if(pessoa.getTipo() == 'C') {
+						Pessoa cli = new Cliente().getClientePorUsuario(usuario);
+						LoggedUser login = new LoggedUser(cli.getId(), cli.getTipo());
+						ClienteView vw = new ClienteView();
+						vw.home(0);
+					} else {
+						Pessoa fun = new Cliente().getClientePorUsuario(usuario);
+						LoggedUser login = new LoggedUser(fun.getId(), fun.getTipo());
+						FuncionarioView vw = new FuncionarioView();
+						vw.home(fun.getId());
+					}
 				} else {
-					System.out.println(pessoa);
 					System.out.println("Senha incorreta");
+					Login.login();
 				}
             } else {
             	System.out.println("Confirmação da senha");
@@ -37,11 +50,12 @@ public class Login {
     				cli.setUsuario(usuario);
     				cli.salvar();
     				System.out.println("Cliente salvo com sucesso");
+    				Login.login();
     			} else {
     				System.out.println("Senhas não coincidem");
     			}
             }
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Ocorreu um erro: " + e);
 		}
 	}

@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -51,16 +52,41 @@ public class Servico implements BaseModel{
 	public void setId_cargo(int id_cargo) {
 		this.id_cargo = id_cargo;
 	}
-	public Servico[] listarServicos() {
-		return null;
+	public ArrayList<Servico> listarServicos() {
+		try {
+	        String sql = "SELECT * FROM Servico";
+	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        stmt.setInt(1, id);
+	        ResultSet rs = stmt.executeQuery();
+	        ArrayList<Servico> servicos = new ArrayList<Servico>();
+	        while (rs.next()) {
+	        	Servico servico = new Servico();
+	        	servico.setNome(rs.getString("nome"));
+	        	servico.setId(rs.getInt("id"));
+	        	servicos.add(servico);
+	        }
+	        return servicos;
+	    } catch (Exception e) {
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
+	        return null;
+	    }
 	}
 	public Servico encontrarServicoPorId(int id) {
-	    for (Servico servico : servicos) {
-	        if (servico.getId() == id) {
-	            return servico;
+		try {
+	        String sql = "SELECT * FROM Servico WHERE id = ?";
+	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        stmt.setInt(1, id);
+	        ResultSet rs = stmt.executeQuery();
+	        Servico servico = new Servico();
+	        if (rs.first()) {
+	        	servico.setNome(rs.getString("nome"));
+	        	servico.setId(rs.getInt("id"));
 	        }
+	        return servico;
+	    } catch (Exception e) {
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
+	        return null;
 	    }
-	    return null;
 	}
 	@Override
 	public int salvar() throws SQLException {

@@ -1,5 +1,6 @@
 package views;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class FuncionarioView extends Menus{
 		this.cargoModel = new Cargo();
 	}
 	@Override
-	public String home(int id_funcionario) {
+	public void home(int id_funcionario) {
 		Funcionario funcionarios = new Funcionario();
 		ArrayList<Funcionario> lista = funcionarios.listarFuncionarios();
 		boolean gerente = false;
@@ -45,7 +46,6 @@ public class FuncionarioView extends Menus{
 		if(gerente) {
 			menu+="\n 10-Relatórios";
 		}
-		return menu;
 		
 	}
 	
@@ -62,7 +62,7 @@ public class FuncionarioView extends Menus{
 		return scan.nextInt();
 	}
 	
-	public int clienteEscolhido(String acao) {
+	public int clienteEscolhido(String acao) throws SQLException {
 		String menu = "Digite o ID que deseja " + acao;
 		menu = String.format("\n %-5d %-20s %-12s", "ID", "Nome", "Usuário");
 

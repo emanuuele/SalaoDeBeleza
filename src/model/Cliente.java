@@ -7,13 +7,10 @@ import java.util.ArrayList;
 
 public class Cliente extends Pessoa implements BaseModel{
 	private int id;
-	private ArrayList<Agendamento> meusAgendamentos;
-	ArrayList<Cliente> clientes = new ArrayList<Cliente>(); 
-	
+	private ArrayList<Agendamento> meusAgendamentos;	
 	public Cliente(String nome, String usuario, String celular, String senha, char tipo, int id) {
 		super(nome, usuario, celular, senha, tipo);
 		this.id=id;
-		setMeusAgendamentos(id);
 	}
 	
 	public Cliente() {
@@ -33,7 +30,7 @@ public class Cliente extends Pessoa implements BaseModel{
 	        }
 	        return cliente;
 	    } catch (Exception e) {
-	        System.out.println("Ocorreu um erro: " + e);
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;
 	    }
 	}
@@ -52,28 +49,9 @@ public class Cliente extends Pessoa implements BaseModel{
 	        }
 	        return cliente;
 	    } catch (Exception e) {
-	        System.out.println("Ocorreu um erro: " + e);
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;
 	    }
-	}
-	
-	public Cliente encontrarClientePorUsuario(String usuario) throws SQLException {
-		try {
-    		String sql = "SELECT * FROM Cliente WHERE usuario = ?";
-        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setString(1, usuario);
-        	ResultSet resultSet = stmt.executeQuery();
-        	Cliente cli = new Cliente();
-        	cli.setId(resultSet.getInt("id"));
-        	cli.setCelular(resultSet.getString("celular"));
-        	cli.setNome(resultSet.getString("nome"));
-        	cli.setUsuario("usuario");
-        	return cli;
-		} catch (SQLException e) {
-			System.out.println("Ocorreu um erro: " + e.getMessage());
-			DAO.getConnection().close();
-			return null;
-		}
 	}
 	
 	public int getId() {
@@ -130,14 +108,24 @@ public class Cliente extends Pessoa implements BaseModel{
 			return 0;
 		}
 	}
-	public ArrayList<Agendamento> getMeusAgendamentos() {
-		return this.meusAgendamentos;
-	}
-	public void setMeusAgendamentos(int id) {
-		this.meusAgendamentos = new Agendamento().agendamentosCliente(id);
+	public ArrayList<Agendamento> getMeusAgendamentos() throws SQLException {
+		return new Agendamento().agendamentosCliente(LoggedUser.getID());
 	}
 	
-	public ArrayList<Cliente> listarClientes(){
-		return clientes;
+	public ArrayList<Cliente> listarClientes() throws SQLException{
+    	ArrayList<Cliente> clientes = new ArrayList<Cliente>(); 
+		try {
+			String sql = "SELECT * FROM Cliente";
+	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        ResultSet rs = stmt.executeQuery();
+	        while(rs.next()) {
+	        	Cliente cliente = new Cliente(rs.getString("nome"), rs.getString("usuario"), rs.getString("celular"), null, rs.getString("tipo").toCharArray()[0], rs.getInt("id"));
+	        	clientes.add(cliente);
+	        }
+			return clientes;
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			return clientes;
+		}
 	}
 }
