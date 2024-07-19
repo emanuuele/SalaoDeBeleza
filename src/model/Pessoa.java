@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Pessoa {
+	private int id;
 	private String nome;
 	private String usuario;
 	private String celular;
@@ -55,11 +56,11 @@ public class Pessoa {
 	
 	public static Pessoa loginUsuario(String usuario) throws SQLException {
 	    try {
-	        String sql = "SELECT Cliente.id AS id_cliente, NULL AS id_funcionario, senha "
+	        String sql = "SELECT Cliente.id AS id_cliente, NULL AS id_funcionario, senha, tipo "
 	                   + "FROM Cliente "
 	                   + "WHERE Cliente.usuario = ? "
 	                   + "UNION "
-	                   + "SELECT NULL AS id_cliente, Funcionario.id AS id_funcionario, senha "
+	                   + "SELECT NULL AS id_cliente, Funcionario.id AS id_funcionario, senha, tipo "
 	                   + "FROM Funcionario "
 	                   + "WHERE Funcionario.usuario = ?;";
 	        
@@ -72,11 +73,13 @@ public class Pessoa {
 	        
 	        if (rs.first()) {
 	            pessoa.setSenha(rs.getString("senha"));
+	            pessoa.setId(rs.getInt("id_cliente"));
+	            pessoa.setTipo(rs.getString("tipo").toCharArray()[0]);
 	            return pessoa;
 	        }
 	        return null;
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        System.out.println("Ocorreu um erro: " + e);
 	        return null;
 	    }
 	}
@@ -114,5 +117,11 @@ public class Pessoa {
 		    	DAO.getConnection().close();
 		    	return true;
 		    }
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

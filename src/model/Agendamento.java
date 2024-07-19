@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,9 +12,25 @@ public class Agendamento implements BaseModel{
 	private int id_cliente;
 	private int id_funcionario;
 	private int id_servico;
+	private String nomeCliente;
+	private String nomeFuncionario;
+	private String nomeServico;
 	Cliente clienteModel = new Cliente();
 	Funcionario funcionarioModel = new Funcionario();
 	Servico servicoModel = new Servico();
+	
+	public Agendamento() {
+		
+	}
+	
+	public Agendamento(int id, String data, String nomeCliente, String nomeFuncionario, String nomeServico) {
+		this.id = id;
+		this.data = data;
+		this.nomeCliente = nomeCliente;
+		this.nomeFuncionario = nomeFuncionario;
+		this.nomeServico = nomeServico;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -103,15 +120,49 @@ public class Agendamento implements BaseModel{
 		
 	}
 	
-	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) {
-		ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
-		
-		return meusAgendamentos;
+	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) throws SQLException {
+		try {
+			ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
+			String sql = "SELECT Cliente.*, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico "
+					+ "FROM Agendamento "
+					+ "JOIN Funcionario ON (Agendamento.id_funcionario = Funcionario.id) "
+					+ "JOIN Servico ON (Agendamento.id_servico = Servico.id) "
+					+ "JOIN Cliente ON (Agendamento.id_cliente = Cliente.id) "
+					+ "WHERE id_funconario = ?";
+		    PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		    stmt.setInt(1, id_cliente);
+		    ResultSet rs = stmt.executeQuery();
+		    while(rs.next()) {
+		    	Agendamento event = new Agendamento(rs.getInt("id"), rs.getString("data"), rs.getString("nomeCliente"), rs.getString("nomeFuncionario"), rs.getString("nomeServico"));
+		        meusAgendamentos.add(event);
+		    }
+			return meusAgendamentos;
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			return null;
+		}
 	}
 	
-	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) {
-		ArrayList<Agendamento> meusAtendimentos = new ArrayList<Agendamento>();
-		
-		return meusAtendimentos;
+	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) throws SQLException {
+		try {
+			ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
+			String sql = "SELECT Cliente.*, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico "
+					+ "FROM Agendamento "
+					+ "JOIN Funcionario ON (Agendamento.id_funcionario = Funcionario.id) "
+					+ "JOIN Servico ON (Agendamento.id_servico = Servico.id) "
+					+ "JOIN Cliente ON (Agendamento.id_cliente = Cliente.id) "
+					+ "WHERE id_funconario = ?";
+		    PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		    stmt.setInt(1, id_cliente);
+		    ResultSet rs = stmt.executeQuery();
+		    while(rs.next()) {
+		    	Agendamento event = new Agendamento(rs.getInt("id"), rs.getString("data"), rs.getString("nomeCliente"), rs.getString("nomeFuncionario"), rs.getString("nomeServico"));
+		        meusAgendamentos.add(event);
+		    }
+			return meusAgendamentos;
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			return null;
+		}
 	}
 }

@@ -13,12 +13,11 @@ public class Funcionario extends Pessoa implements BaseModel {
 	private ArrayList<Agendamento> atendimentosFuncionario;
 	ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>(); 
 	
-	public Funcionario(String nome, String usuario, String celular, String senha, char tipo, int id, boolean ehGerente, int id_cargo) {
+	public Funcionario(String nome, String usuario, String celular, String senha, char tipo, int id, boolean ehGerente, int id_cargo) throws SQLException {
 		super(nome, usuario, celular, senha, tipo);
 		this.id=id;
 		this.id_cargo = id_cargo;
 		this.ehGerente = ehGerente;
-		setAtendimentosFuncionario(id);
 	}
 	public Funcionario() {
 		
@@ -36,7 +35,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 	        }
 	        return fun;
 	    } catch (Exception e) {
-	        System.out.println("Ocorreu um erro: " + e);
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;
 	    }
 	}
@@ -55,7 +54,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 	        }
 	        return fun;
 	    } catch (Exception e) {
-	        System.out.println("Ocorreu um erro: " + e);
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;
 	    }
 	}
@@ -131,22 +130,26 @@ public class Funcionario extends Pessoa implements BaseModel {
 			return 0;
 		}
 	}
-	
-	public ArrayList<Agendamento> getAtendimentosFuncionario() {
-		return this.atendimentosFuncionario;
+	public static ArrayList<String> funcionariosPorCargo(int id_cargo, int dia, int mes) throws SQLException {
+    	ArrayList<String> nomes = new ArrayList<String>();
+		try {
+	        String sql = "SELECT nome, id FROM funcionario where id_cargo in (select id_cargo from servico where id_cargo = ?)";
+        	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
+        	stmt.setInt(1, id_cargo);
+        	ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	        	nomes.add(String.valueOf(rs.getInt("id")) + " " + rs.getString("nome"));
+	        }
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			DAO.getConnection().close();
+		}
+		return nomes;
 	}
-	public void setAtendimentosFuncionario(int id) {
-		this.atendimentosFuncionario = new Agendamento().atendimentosFuncionario(id);
+	public ArrayList<Agendamento> getAtendimentosFuncionario() throws SQLException {
+		return new Agendamento().atendimentosFuncionario(id);
 	}
 	public ArrayList<Funcionario> listarFuncionarios() {
 		return funcionarios;
-	}
-	public Funcionario encontrarFuncionarioPorUsuario(String usuario) {
-	    for (Funcionario fun : funcionarios) {
-	        if (fun.getUsuario() == usuario) {
-	            return fun;
-	        }
-	    }
-	    return null;
 	}
 }

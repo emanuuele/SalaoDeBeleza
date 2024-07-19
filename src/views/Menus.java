@@ -3,7 +3,7 @@ package views;
 import java.util.Scanner;
 
 public abstract class Menus {
-	public abstract String home(int id);
+	public abstract void home(int id) throws Exception;
 	public String menuEditarExcluir() {
 		String tipo = "";
 		Scanner scan = new Scanner(System.in);
