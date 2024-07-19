@@ -3,6 +3,7 @@ package views;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import controller.FuncionarioController;
 import model.Agendamento;
 import model.Servico;
 
@@ -30,19 +31,39 @@ public class AgendamentoView {
 		return lista;
 	}
 	
-	public void agendarHorario() {
+	public static void agendarHorario() {
 		try {
 			Scanner scan = new Scanner(System.in);
 			ServicoView.listarServicos();
 			System.out.println("Digite o ID do procedimento que deseja fazer");
 			String optServico = scan.next();
-			System.out.println(String.format("%-5s %-20s ", "ID", "Mês"));
-			
-			
+			String meses = String.format("%-5s %-20s ", "ID", "Mês");
+			meses += String.format("%-5s %-20s ", "1", "Jan");
+			meses += String.format("%-5s %-20s ", "2", "Fev");
+			meses += String.format("%-5s %-20s ", "3", "Mar");
+			meses += String.format("%-5s %-20s ", "4", "Abr");
+			meses += String.format("%-5s %-20s ", "5", "Mai");
+			meses += String.format("%-5s %-20s ", "6", "Jun");
+			meses += String.format("%-5s %-20s ", "7", "Jul");
+			meses += String.format("%-5s %-20s ", "8", "Ago");
+			meses += String.format("%-5s %-20s ", "9", "Set");
+			meses += String.format("%-5s %-20s ", "10", "Out");
+			meses += String.format("%-5s %-20s ", "11", "Nov");
+			meses += String.format("%-5s %-20s ", "12", "Dez");
+			System.out.println(meses);
 			System.out.println("Digite o ID do mes que deseja fazer o procedimento");
 			String optMes = scan.next();
+			System.out.println("Digite o dia do mes que deseja fazer o procedimento");
+			String optDia = scan.next();
+			Servico servico = Servico.encontrarServicoPorId(Integer.parseInt(optServico));
+			try {
+				int response = FuncionarioController.agendar(Integer.parseInt(optServico), servico.getTempo(), Integer.parseInt(optDia), Integer.parseInt(optMes));
+			} catch (NumberFormatException e) {
+				System.out.println("Digite apenas numeros!");
+				agendarHorario();
+			}
 		} catch (Exception e) {
-
+			System.out.println("Ocorreu um erro: "+ e.getMessage());
 		}
 	}
 	

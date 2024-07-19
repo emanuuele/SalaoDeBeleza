@@ -9,6 +9,7 @@ import java.util.Date;
 public class Agendamento implements BaseModel{
 	private int id;
 	private String data;
+	private String dataFinal;
 	private int id_cliente;
 	private int id_funcionario;
 	private int id_servico;
@@ -45,6 +46,14 @@ public class Agendamento implements BaseModel{
 
 	public void setData(String data) {
 		this.data = data;
+	}
+	
+	public String getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(String data) {
+		this.dataFinal = data;
 	}
 
 	public int getId_cliente() {
