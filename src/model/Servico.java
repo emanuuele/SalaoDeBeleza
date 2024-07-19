@@ -71,7 +71,7 @@ public class Servico implements BaseModel{
 	        return null;
 	    }
 	}
-	public Servico encontrarServicoPorId(int id) {
+	public static Servico encontrarServicoPorId(int id) {
 		try {
 	        String sql = "SELECT * FROM Servico WHERE id = ?";
 	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
