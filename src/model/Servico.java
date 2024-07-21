@@ -53,23 +53,23 @@ public class Servico implements BaseModel{
 		this.id_cargo = id_cargo;
 	}
 	public ArrayList<Servico> listarServicos() {
+        ArrayList<Servico> servicos = new ArrayList<Servico>();
 		try {
 	        String sql = "SELECT * FROM Servico";
 	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	        stmt.setInt(1, id);
 	        ResultSet rs = stmt.executeQuery();
-	        ArrayList<Servico> servicos = new ArrayList<Servico>();
-	        while (rs.next()) {
-	        	Servico servico = new Servico();
-	        	servico.setNome(rs.getString("nome"));
-	        	servico.setId(rs.getInt("id"));
-	        	servicos.add(servico);
+	        if(rs.next()) {
+	        	while (rs.next()) {
+		        	Servico servico = new Servico();
+		        	servico.setNome(rs.getString("nome"));
+		        	servico.setId(rs.getInt("id"));
+		        	servicos.add(servico);
+		        }
 	        }
-	        return servicos;
 	    } catch (Exception e) {
 	        System.out.println("Ocorreu um erro: " + e.getMessage());
-	        return null;
 	    }
+		return servicos;
 	}
 	public static Servico encontrarServicoPorId(int id) {
 		try {
@@ -81,6 +81,7 @@ public class Servico implements BaseModel{
 	        if (rs.first()) {
 	        	servico.setNome(rs.getString("nome"));
 	        	servico.setId(rs.getInt("id"));
+	        	servico.setTempo(rs.getInt("tempo"));
 	        }
 	        return servico;
 	    } catch (Exception e) {
@@ -91,7 +92,7 @@ public class Servico implements BaseModel{
 	@Override
 	public int salvar() throws SQLException {
 		try {
-    		String sql = "INSERT INTO Servico (nome, id_cargo, valor, tempo) VALUES (?, ?, ?, ?, ?)";
+    		String sql = "INSERT INTO Servico (nome, id_cargo, valor, tempo) VALUES (?, ?, ?, ?)";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
         	stmt.setString(1, this.getNome());
             stmt.setInt(2, this.getId_cargo());
@@ -109,7 +110,7 @@ public class Servico implements BaseModel{
 		try {
     		String sql = "DELETE FROM Servico WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setInt(1, this.getId());
+        	stmt.setInt(1, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
@@ -126,6 +127,7 @@ public class Servico implements BaseModel{
             stmt.setInt(2, this.getId_cargo());
             stmt.setDouble(3, this.getValor());
             stmt.setInt(4, this.getTempo());
+            stmt.setInt(5, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());

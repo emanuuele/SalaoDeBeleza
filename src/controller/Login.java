@@ -26,16 +26,16 @@ public class Login {
 			byte[] hash1 = cript.digest(senha.getBytes(StandardCharsets.UTF_8));
 			if(pessoa != null) {
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
-					if(pessoa.getTipo() == 'C') {
-						Pessoa cli = new Cliente().getClientePorUsuario(usuario);
-						LoggedUser login = new LoggedUser(cli.getId(), cli.getTipo());
+					if(String.valueOf(pessoa.getTipo()).equals("C")) {
+						Pessoa cli = Cliente.getClientePorUsuario(usuario);
+						new LoggedUser(cli.getId(), cli.getTipo(), 0);
 						ClienteView vw = new ClienteView();
 						vw.home(0);
 					} else {
-						Pessoa fun = new Cliente().getClientePorUsuario(usuario);
-						LoggedUser login = new LoggedUser(fun.getId(), fun.getTipo());
+						Funcionario fun = Funcionario.getFuncionarioPorUsuario(usuario);
+						new LoggedUser(fun.getId(), fun.getTipo(), fun.getEhGerente());
 						FuncionarioView vw = new FuncionarioView();
-						vw.home(fun.getId());
+						vw.home(0);
 					}
 				} else {
 					System.out.println("Senha incorreta");
@@ -46,13 +46,16 @@ public class Login {
     			String csenha = scan.next();
     			if(senha.equals(csenha)) {
     				Cliente cli = new Cliente();
-    				cli.setSenha(csenha);
+    				byte[] hashCSenha = cript.digest(senha.getBytes(StandardCharsets.UTF_8));
+    				cli.setTipo('C');
+    				cli.setSenha(Arrays.toString(hashCSenha));
     				cli.setUsuario(usuario);
     				cli.salvar();
     				System.out.println("Cliente salvo com sucesso");
     				Login.login();
     			} else {
     				System.out.println("Senhas não coincidem");
+    				Login.login();
     			}
             }
 		} catch (Exception e) {

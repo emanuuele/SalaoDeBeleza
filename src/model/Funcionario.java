@@ -8,12 +8,11 @@ import java.util.ArrayList;
 public class Funcionario extends Pessoa implements BaseModel {
 	
 	private int id;
-	private boolean ehGerente;
+	private int ehGerente;
 	private int id_cargo;
 	private ArrayList<Agendamento> atendimentosFuncionario;
-	ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>(); 
 	
-	public Funcionario(String nome, String usuario, String celular, String senha, char tipo, int id, boolean ehGerente, int id_cargo) throws SQLException {
+	public Funcionario(String nome, String usuario, String celular, String senha, char tipo, int id, int ehGerente, int id_cargo) throws SQLException {
 		super(nome, usuario, celular, senha, tipo);
 		this.id=id;
 		this.id_cargo = id_cargo;
@@ -42,7 +41,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 	
 	public static Funcionario getFuncionarioPorUsuario(String usuario) throws Exception {
 	    try {
-	        String sql = "SELECT * FROM Cliente WHERE usuario = ?";
+	        String sql = "SELECT * FROM Funcionario WHERE usuario = ?";
 	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        stmt.setString(1, usuario);
 	        ResultSet rs = stmt.executeQuery();
@@ -51,6 +50,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 	            fun.setNome(rs.getString("nome"));
 	            fun.setId(rs.getInt("id"));
 	            fun.setSenha(rs.getString("senha"));
+	            fun.setEhGerente(rs.getInt("ehGerente"));
 	        }
 	        return fun;
 	    } catch (Exception e) {
@@ -58,20 +58,17 @@ public class Funcionario extends Pessoa implements BaseModel {
 	        return null;
 	    }
 	}
-	public void add(String nome, String usuario, String celular, String senha, char tipo, boolean ehGerente, int id_cargo) {
-		//Funcionario fun = new Funcionario(nome, usuario, celular, senha, tipo, ehGerente, id_cargo);
-	}
 	public int getId() {
 		return this.id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public boolean getEhGerente() {
+	public int getEhGerente() {
 		return this.ehGerente;
 	}
-	public void setEhGerente(boolean ehGerente) {
-		this.ehGerente = ehGerente;
+	public void setEhGerente(int i) {
+		this.ehGerente = i;
 	}
 	public int getId_cargo() {
 		return this.id_cargo;
@@ -89,9 +86,12 @@ public class Funcionario extends Pessoa implements BaseModel {
             stmt.setString(3, this.getCelular());
             stmt.setString(4, this.getSenha());
             stmt.setString(5, String.valueOf(this.getTipo()));
-            stmt.setString(6, String.valueOf(this.getEhGerente() == true ? 'S' : 'N'));
-            stmt.setInt(7, this.getId_cargo());
-
+            stmt.setInt(6, this.getEhGerente());
+            if(this.getId_cargo() == 0) {
+            	stmt.setNull(7, id_cargo);;
+            } else {
+                stmt.setInt(7, this.getId_cargo());
+            }
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
@@ -104,7 +104,7 @@ public class Funcionario extends Pessoa implements BaseModel {
 		try {
     		String sql = "DELETE FROM Funcionario WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setInt(1, this.getId());
+        	stmt.setInt(1, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
@@ -120,7 +120,7 @@ public class Funcionario extends Pessoa implements BaseModel {
         	stmt.setString(1, this.getNome());
             stmt.setString(2, this.getUsuario());
             stmt.setString(3, this.getCelular());
-            stmt.setString(4, String.valueOf(this.getEhGerente() == true ? 'S' : 'N'));
+            stmt.setString(4, String.valueOf(this.getEhGerente()));
             stmt.setInt(5, id);
 
         	return stmt.executeUpdate();
@@ -150,6 +150,25 @@ public class Funcionario extends Pessoa implements BaseModel {
 		return new Agendamento().atendimentosFuncionario(id);
 	}
 	public ArrayList<Funcionario> listarFuncionarios() {
+		ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>(); 
+		try {
+	        String sql = "SELECT f.*, c.nome as nomecargo FROM Funcionario as f LEFT JOIN Cargo as c ON (c.id = f.id_cargo)";
+	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	        	Funcionario fun = new Funcionario();
+	            fun.setNome(rs.getString("nome") +" | " + (rs.getString("nomecargo") != null ? rs.getString("nomecargo") : ""));
+	            fun.setId(rs.getInt("id"));
+	            fun.setSenha(rs.getString("senha"));
+	            fun.setEhGerente(rs.getInt("ehGerente"));
+	            fun.setCelular(String.valueOf(rs.getInt("celular")));
+	            fun.setUsuario(rs.getString("usuario"));
+	            funcionarios.add(fun);
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Ocorreu um erro: " + e.getMessage());
+	        return null;
+	    }
 		return funcionarios;
 	}
 }

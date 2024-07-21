@@ -95,12 +95,13 @@ public class Agendamento implements BaseModel{
 	@Override
 	public int salvar() throws SQLException {
 		try {
-    		String sql = "INSERT INTO Agendamento (data, id_cliente, id_funcionario, id_sevico) VALUES (?, ?, ?, ?)";
+    		String sql = "INSERT INTO Agendamento (data, id_cliente, id_funcionario, id_servico, data_final) VALUES (?, ?, ?, ?, ?)";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
         	stmt.setString(1, this.getData());
         	stmt.setInt(2, this.getId_cliente());
         	stmt.setInt(3, this.getId_funcionario());
         	stmt.setInt(4, this.getId_servico());
+        	stmt.setString(5, this.getDataFinal());
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
@@ -114,7 +115,7 @@ public class Agendamento implements BaseModel{
 		try {
     		String sql = "DELETE FROM Agendamento WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setInt(1, this.getId());
+        	stmt.setInt(1, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());

@@ -82,9 +82,9 @@ public class Cliente extends Pessoa implements BaseModel{
 	@Override
 	public int deletar(int id) throws SQLException {
 		try {
-    		String sql = "DELETE FROM Agendamento WHERE id = ?";
+    		String sql = "DELETE FROM Cliente WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setInt(1, this.getId());
+        	stmt.setInt(1, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());

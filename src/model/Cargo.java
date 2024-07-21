@@ -9,7 +9,6 @@ public class Cargo implements BaseModel{
 	private String nome;
 	private int id;
 	private int id_serviço;
-	ArrayList<Cargo> cargos = new ArrayList<Cargo>(); 
 	public Cargo(String nome, int id, int id_serviço) {
 		this.nome=nome;
 		this.id=id;
@@ -29,12 +28,6 @@ public class Cargo implements BaseModel{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getId_serviço() {
-		return this.id_serviço;
-	}
-	public void setId_serviço(int id_serviço) {
-		this.id_serviço = id_serviço;
-	}
 	@Override
 	public int salvar() throws SQLException {
 		try {
@@ -53,7 +46,7 @@ public class Cargo implements BaseModel{
 		try {
     		String sql = "DELETE FROM Cargo WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
-        	stmt.setInt(1, this.getId());
+        	stmt.setInt(1, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
@@ -95,8 +88,23 @@ public class Cargo implements BaseModel{
 	    }
 	}
 	
-	public ArrayList<Cargo> listarServicos() {
-        return cargos;
+	public ArrayList<Cargo> listarCargos() {
+		 try {
+				ArrayList<Cargo> cargos = new ArrayList<Cargo>(); 
+		        String sql = "SELECT * FROM Cargo";
+		        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		        ResultSet rs = stmt.executeQuery();
+		        while (rs.next()) {
+		        	Cargo cargo = new Cargo();
+		        	cargo.setNome(rs.getString("nome"));
+		        	cargo.setId(rs.getInt("id"));
+		        	cargos.add(cargo);
+		        }
+		        return cargos;
+		    } catch (Exception e) {
+		        System.out.println("Ocorreu um erro: " + e.getMessage());
+		        return null;
+		    }
     }
 
 
