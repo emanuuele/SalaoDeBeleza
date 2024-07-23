@@ -16,7 +16,7 @@ public class Main {
 		//AgendamentoView.agendarHorario();
 		//FuncionarioController.cadastroServico();
 		Login.login();
-		
+		//RelatorioController.financeiro();
 	}
 
 }

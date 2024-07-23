@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import controller.FuncionarioController;
 import controller.Login;
+import controller.RelatorioController;
 import model.Cargo;
 import model.Cliente;
 import model.Funcionario;
@@ -48,6 +49,11 @@ public class FuncionarioView extends Menus {
 			int opt = scan.nextInt();
 			switch (opt) {
 			case 1: {
+				AgendamentoView vw = new AgendamentoView();
+				for (String event : vw.meusAtendimentos(LoggedUser.getID())) {
+					System.out.println(event);
+				}
+				this.home(0);
 				break;
 			}
 			case 2: {
@@ -83,7 +89,28 @@ public class FuncionarioView extends Menus {
 				break;
 			}
 			case 10: {
-
+				System.out.println("1 - FINANCEIRO");
+				System.out.println("2 - CLIENTES");
+				System.out.println("Digite um opção:");
+				try {
+					int optRelatorio = scan.nextInt();
+					switch (optRelatorio) {
+					case 1: {
+						RelatorioController.financeiro();
+						break;
+					}
+					case 2: {
+						RelatorioController.clientes();
+						break;
+					}
+					default:
+						throw new IllegalArgumentException("Digite um valor válido");
+					}
+				} catch (IllegalArgumentException e) {
+					System.out.println("Digite um número");
+				}
+				this.home(0);
+				break;
 			}
 			default:
 				throw new InputMismatchException();
