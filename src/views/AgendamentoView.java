@@ -15,9 +15,9 @@ public class AgendamentoView {
 		ArrayList<Agendamento> atendimentos = atendimento.atendimentosFuncionario(id);
 		for (Agendamento evento : atendimentos) {
 			lista.add(String.format("%-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(),
-					evento.getNomeCliente(evento.getId_cliente()),
-					evento.getNomeFuncionario(evento.getId_funcionario()),
-					evento.getNomeServico(evento.getId_servico())));
+					evento.getNomeCliente(),
+					evento.getNomeFuncionario(),
+					evento.getNomeServico()));
 		}
 		return lista;
 	}
@@ -29,9 +29,9 @@ public class AgendamentoView {
 		ArrayList<Agendamento> atendimentos = atendimento.agendamentosCliente(id);
 		for (Agendamento evento : atendimentos) {
 			lista.add(String.format("\n %-5d %-20s %-12s %-15s %-10s%n", evento.getId(), evento.getData(),
-					evento.getNomeCliente(evento.getId_cliente()),
-					evento.getNomeFuncionario(evento.getId_funcionario()),
-					evento.getNomeServico(evento.getId_servico())));
+					evento.getNomeCliente(),
+					evento.getNomeFuncionario(),
+					evento.getNomeServico()));
 		}
 		return lista;
 	}
@@ -52,22 +52,25 @@ public class AgendamentoView {
 				if (servico == null) {
 					throw new Exception("Digite um serviço válido");
 				}
-				String meses = String.format("%-5s %-20s ", "ID", "Mês");
-				meses += String.format("%-5s %-20s ", "1", "Jan");
-				meses += String.format("%-5s %-20s ", "2", "Fev");
-				meses += String.format("%-5s %-20s ", "3", "Mar");
-				meses += String.format("%-5s %-20s ", "4", "Abr");
-				meses += String.format("%-5s %-20s ", "5", "Mai");
-				meses += String.format("%-5s %-20s ", "6", "Jun");
-				meses += String.format("%-5s %-20s ", "7", "Jul");
-				meses += String.format("%-5s %-20s ", "8", "Ago");
-				meses += String.format("%-5s %-20s ", "9", "Set");
-				meses += String.format("%-5s %-20s ", "10", "Out");
-				meses += String.format("%-5s %-20s ", "11", "Nov");
-				meses += String.format("%-5s %-20s ", "12", "Dez");
+				String meses = String.format("\n %-5s %-20s ", "ID", "Mês");
+				meses += String.format("\n %-5s %-20s ", "1", "Jan");
+				meses += String.format("\n %-5s %-20s ", "2", "Fev");
+				meses += String.format("\n %-5s %-20s ", "3", "Mar");
+				meses += String.format("\n %-5s %-20s ", "4", "Abr");
+				meses += String.format("\n %-5s %-20s ", "5", "Mai");
+				meses += String.format("\n %-5s %-20s ", "6", "Jun");
+				meses += String.format("\n %-5s %-20s ", "7", "Jul");
+				meses += String.format("\n %-5s %-20s ", "8", "Ago");
+				meses += String.format("\n %-5s %-20s ", "9", "Set");
+				meses += String.format("\n %-5s %-20s ", "10", "Out");
+				meses += String.format("\n %-5s %-20s ", "11", "Nov");
+				meses += String.format("\n %-5s %-20s ", "12", "Dez");
 				System.out.println(meses);
 				System.out.println("Digite o ID do mes que deseja fazer o procedimento");
 				String optMes = scan.next();
+				if (Integer.parseInt(optMes) < 0 || Integer.parseInt(optMes) > 12) {
+					throw new Exception("Digite um mês válido!");
+				}
 				System.out.println("Digite o dia do mes que deseja fazer o procedimento");
 				String optDia = scan.next();
 				try {
@@ -79,7 +82,8 @@ public class AgendamentoView {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Ocorreu um erro: " + e.getMessage() + e.getLocalizedMessage());
+			System.out.println("Ocorreu um erro: " + e.getMessage());
+			agendarHorario();
 		}
 	}
 

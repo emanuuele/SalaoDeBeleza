@@ -24,6 +24,7 @@ import model.Pessoa;
 import model.Servico;
 import views.AgendamentoView;
 import views.CargoView;
+import views.ClienteView;
 import views.FuncionarioView;
 
 public class FuncionarioController {
@@ -51,6 +52,7 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
+							LoggedUser.home();
 							break;
 						}
 					}
@@ -68,6 +70,7 @@ public class FuncionarioController {
 					cli.setUsuario(usuario);
 					cli.salvar();
 					System.out.println("Cliente adicionado com sucesso!");
+					LoggedUser.home();
 				} else {
 					System.out.println("Já existe alguém com este usuário");
 					System.out.println("Deseja tentar novamente? Digite Sim/Não");
@@ -131,7 +134,9 @@ public class FuncionarioController {
 				start_time = start_time.plus(tempo, ChronoUnit.MINUTES);
 
 				boolean encontrouDisponivel = false;
+				ArrayList<String> idDisponiveis = new ArrayList<String>();
 				while (rs.next()) {
+					idDisponiveis.add(String.valueOf(rs.getInt("id")));
 					System.out.println(rs.getInt("id") + ". " + rs.getString("nome"));
 					encontrouDisponivel = true;
 				}
@@ -142,34 +147,38 @@ public class FuncionarioController {
 					Scanner scan = new Scanner(System.in);
 					System.out.println("Deseja agendar este horário? Sim/Não");
 					String esseHorario = scan.next().toLowerCase();
-					
+
 					if (esseHorario.equals("sim")) {
 						System.out.println("Digite o ID do funcionário que deseja que realize seu serviço:");
 						String idFunOpt = scan.next();
+						if(idDisponiveis.indexOf(idFunOpt) == -1) {
+							throw new Exception("Funcionário não existe ou não está disponível.");
+						}
 						try {
 							idFun = Integer.parseInt(idFunOpt);
 							Agendamento evento = new Agendamento();
 							evento.setData(start_time.format(format));
-							if (LoggedUser.getTipo() == 'C') {
-								evento.setId_cliente(LoggedUser.getID());
-							} else {
+							if (LoggedUser.getTipo() == 'F') {
 								evento.setId_cliente(1);
+							} else {
+								evento.setId_cliente(LoggedUser.getID());
 							}
 							evento.setId_funcionario(idFun);
 							evento.setId_servico(id_servico);
 							evento.setDataFinal(end_time.format(format));
 							evento.salvar();
 							System.out.println("Confirmado!");
-							new FuncionarioView().home(0);
 							return idFun;
 						} catch (NumberFormatException e) {
 							throw new Exception("Digite apenas números válidos para o ID.");
 						} finally {
-							scan.close();
+							if (LoggedUser.getTipo() == 'F') {
+								new FuncionarioView().home(0);
+							} else {
+								new ClienteView().home(0);
+							}
 						}
 					}
-					new FuncionarioView().home(0);
-					return 0;
 				}
 			}
 		} catch (Exception e) {
@@ -204,6 +213,7 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
+							LoggedUser.home();
 							break;
 						}
 					}
@@ -245,12 +255,16 @@ public class FuncionarioController {
 					fun.setUsuario(usuario);
 					fun.salvar();
 					System.out.println("Funcionario adicionado com sucesso!");
+					FuncionarioView vw = new FuncionarioView();
+					vw.home(0);
 				} else {
 					System.out.println("Já existe alguém com este usuário");
 					System.out.println("Deseja tentar novamente? Digite Sim/Não");
 					String opt = scan.next();
 					if (opt.toLowerCase().equals("sim")) {
 						continuar = true;
+					} else {
+						LoggedUser.home();
 					}
 				}
 			}

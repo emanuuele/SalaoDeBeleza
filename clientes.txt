@@ -1,0 +1,10 @@
+
+ QTD   NOME                 MÊS       
+
+ 1     maira                October                        
+
+ 2     gus                  July                           
+
+ 5     null                 October                        
+
+ 1     emanuele             October                        

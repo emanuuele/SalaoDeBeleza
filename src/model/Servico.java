@@ -82,8 +82,9 @@ public class Servico implements BaseModel{
 	        	servico.setNome(rs.getString("nome"));
 	        	servico.setId(rs.getInt("id"));
 	        	servico.setTempo(rs.getInt("tempo"));
+	        	return servico;
 	        }
-	        return servico;
+	        return null;
 	    } catch (Exception e) {
 	        System.out.println("Ocorreu um erro: " + e.getMessage());
 	        return null;

@@ -18,8 +18,30 @@ public class Agendamento implements BaseModel{
 	private String nomeServico;
 	Cliente clienteModel = new Cliente();
 	Funcionario funcionarioModel = new Funcionario();
-	Servico servicoModel = new Servico();
-	
+	public String getNomeCliente() {
+		return this.nomeCliente;
+	}
+
+	public void setNomeCliente(String nomeCliente) {
+		this.nomeCliente = nomeCliente;
+	}
+
+	public String getNomeFuncionario() {
+		return this.nomeFuncionario;
+	}
+
+	public void setNomeFuncionario(String nomeFuncionario) {
+		this.nomeFuncionario = nomeFuncionario;
+	}
+
+	public String getNomeServico() {
+		return this.nomeServico;
+	}
+
+	public void setNomeServico(String nomeServico) {
+		this.nomeServico = nomeServico;
+	}
+
 	public Agendamento() {
 		
 	}
@@ -71,18 +93,6 @@ public class Agendamento implements BaseModel{
 	public void setId_funcionario(int id_funcionario) {
 		this.id_funcionario = id_funcionario;
 	}
-
-	public String getNomeCliente(int id_cliente) throws Exception {
-		return clienteModel.getClientePorId(id_cliente).getNome();
-	}
-	
-	public String getNomeFuncionario(int id_funcionario) throws Exception {
-		return funcionarioModel.getFuncionarioPorId(id_funcionario).getNome();
-	}
-	
-	public String getNomeServico(int id_servico) {
-		return servicoModel.encontrarServicoPorId(id_servico).getNome();
-	}
 	
 	public int getId_servico() {
 		return id_servico;
@@ -133,12 +143,12 @@ public class Agendamento implements BaseModel{
 	public ArrayList<Agendamento> agendamentosCliente(int id_cliente) throws SQLException {
 		try {
 			ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
-			String sql = "SELECT Cliente.*, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico "
+			String sql = "SELECT Cliente.nome as nomeCliente, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico, Agendamento.data, Agendamento.id "
 					+ "FROM Agendamento "
 					+ "JOIN Funcionario ON (Agendamento.id_funcionario = Funcionario.id) "
 					+ "JOIN Servico ON (Agendamento.id_servico = Servico.id) "
 					+ "JOIN Cliente ON (Agendamento.id_cliente = Cliente.id) "
-					+ "WHERE id_funconario = ?";
+					+ "WHERE Agendamento.id_cliente = ?";
 		    PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		    stmt.setInt(1, id_cliente);
 		    ResultSet rs = stmt.executeQuery();
@@ -156,14 +166,14 @@ public class Agendamento implements BaseModel{
 	public ArrayList<Agendamento> atendimentosFuncionario(int id_funcionario) throws SQLException {
 		try {
 			ArrayList<Agendamento> meusAgendamentos = new ArrayList<Agendamento>();
-			String sql = "SELECT Cliente.*, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico "
+			String sql = "SELECT Cliente.*, Funcionario.nome as nomeFuncionario, Cliente.nome as nomeCliente, Servico.nome as nomeServico, Agendamento.data "
 					+ "FROM Agendamento "
 					+ "JOIN Funcionario ON (Agendamento.id_funcionario = Funcionario.id) "
 					+ "JOIN Servico ON (Agendamento.id_servico = Servico.id) "
 					+ "JOIN Cliente ON (Agendamento.id_cliente = Cliente.id) "
-					+ "WHERE id_funconario = ?";
+					+ "WHERE Agendamento.id_funcionario = ?";
 		    PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		    stmt.setInt(1, id_cliente);
+		    stmt.setInt(1, id_funcionario);
 		    ResultSet rs = stmt.executeQuery();
 		    while(rs.next()) {
 		    	Agendamento event = new Agendamento(rs.getInt("id"), rs.getString("data"), rs.getString("nomeCliente"), rs.getString("nomeFuncionario"), rs.getString("nomeServico"));
