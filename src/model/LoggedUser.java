@@ -3,6 +3,9 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import views.ClienteView;
+import views.FuncionarioView;
+
 public class LoggedUser {
 	public LoggedUser(int id_user, char tipo_user, int ehGerente) {
         this.ID = id_user;
@@ -25,6 +28,14 @@ public class LoggedUser {
 	}
 	public static char getTipo() {
 		return TIPO;
+	}
+	
+	public static void home() throws Exception {
+		if (getTipo() == 'F') {
+			new FuncionarioView().home(ID);
+		} else {
+			new ClienteView().home(ID);
+		}
 	}
 	
 }

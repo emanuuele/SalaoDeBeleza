@@ -28,12 +28,12 @@ public class Login {
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
 					if(String.valueOf(pessoa.getTipo()).equals("C")) {
 						Pessoa cli = Cliente.getClientePorUsuario(usuario);
-						new LoggedUser(cli.getId(), cli.getTipo(), 0);
+						new LoggedUser(cli.getId(), 'C', 0);
 						ClienteView vw = new ClienteView();
 						vw.home(0);
 					} else {
 						Funcionario fun = Funcionario.getFuncionarioPorUsuario(usuario);
-						new LoggedUser(fun.getId(), fun.getTipo(), fun.getEhGerente());
+						new LoggedUser(fun.getId(), 'F', fun.getEhGerente());
 						FuncionarioView vw = new FuncionarioView();
 						vw.home(0);
 					}

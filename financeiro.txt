@@ -1,8 +1,10 @@
 
  QTD   NOME SERVIÇO         TOTAL MêS            MÊS       
 
- 2     dnwekck              0,0                  August    
+ 4     xapinha              October                        
 
- 2     dnwekck              0,0                  July      
+ 1     xapinha              July                           
 
- 14    dnwekck              0,0                  October   
+ 1     dnwekck              July                           
+
+ 3     dnwekck              October                        

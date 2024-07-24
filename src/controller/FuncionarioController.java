@@ -52,6 +52,7 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
+							LoggedUser.home();
 							break;
 						}
 					}
@@ -69,6 +70,7 @@ public class FuncionarioController {
 					cli.setUsuario(usuario);
 					cli.salvar();
 					System.out.println("Cliente adicionado com sucesso!");
+					LoggedUser.home();
 				} else {
 					System.out.println("Já existe alguém com este usuário");
 					System.out.println("Deseja tentar novamente? Digite Sim/Não");
@@ -150,7 +152,7 @@ public class FuncionarioController {
 						System.out.println("Digite o ID do funcionário que deseja que realize seu serviço:");
 						String idFunOpt = scan.next();
 						if(idDisponiveis.indexOf(idFunOpt) == -1) {
-							throw new Exception("Esse funcionário não existe ou não está disponível");
+							throw new Exception("Funcionário não existe ou não está disponível.");
 						}
 						try {
 							idFun = Integer.parseInt(idFunOpt);
@@ -211,6 +213,7 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
+							LoggedUser.home();
 							break;
 						}
 					}
@@ -260,6 +263,8 @@ public class FuncionarioController {
 					String opt = scan.next();
 					if (opt.toLowerCase().equals("sim")) {
 						continuar = true;
+					} else {
+						LoggedUser.home();
 					}
 				}
 			}

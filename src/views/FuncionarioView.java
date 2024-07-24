@@ -89,7 +89,7 @@ public class FuncionarioView extends Menus {
 				break;
 			}
 			case 10: {
-				System.out.println("1 - FINANCEIRO");
+				System.out.println("1 - FINACEIRO");
 				System.out.println("2 - CLIENTES");
 				System.out.println("Digite um opção:");
 				try {
