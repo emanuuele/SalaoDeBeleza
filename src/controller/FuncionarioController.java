@@ -27,7 +27,9 @@ import views.CargoView;
 import views.ClienteView;
 import views.FuncionarioView;
 
+//classe controladora dos valores que a aplicação recebe das views e "transporta" de forma que as models consiga receber e fazer suas devidas ações no banco de dados
 public class FuncionarioController {
+	//metodo para adicionar o cliente
 	public static void addCliente() throws Exception {
 		try (Connection connection = DAO.getConnection()) {
 			boolean continuar = true;
@@ -43,6 +45,7 @@ public class FuncionarioController {
 					System.out.println("Digite o celular do cliente");
 					String celularInput = scan.next();
 					try {
+						//verifica se há apenas numeros no campo de celular
 						int celular = Integer.parseInt(celularInput);
 						cli.setCelular(String.valueOf(celular));
 						celularValido = true;
@@ -57,6 +60,7 @@ public class FuncionarioController {
 						}
 					}
 				}
+				//pede uma senha e criptografa ela
 				System.out.println("Digite a senha para o cliente");
 				String senha = scan.next();
 				MessageDigest cript = MessageDigest.getInstance("MD5");
@@ -66,12 +70,14 @@ public class FuncionarioController {
 				System.out.println("Digite o usuário do cliente");
 				String usuario = scan.next();
 				Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+				//verifica se o usuario digitado está disponível e se sim, adicipona-o
 				if (pessoa == null) {
 					cli.setUsuario(usuario);
 					cli.salvar();
 					System.out.println("Cliente adicionado com sucesso!");
 					LoggedUser.home();
-				} else {
+				} //se não, pergunta se quer tentar novamente
+				else {
 					System.out.println("Já existe alguém com este usuário");
 					System.out.println("Deseja tentar novamente? Digite Sim/Não");
 					String opt = scan.next();
@@ -85,6 +91,7 @@ public class FuncionarioController {
 		}
 	}
 
+	//metodo que adiciona o cargo, (está aqui porque quem pode adicionar cargo são os funcionários, então não há tanta necessidade de criar um controller apenas para isso
 	public void addCargo() throws Exception {
 		try (Connection connection = DAO.getConnection()) {
 			boolean continuar = true;
@@ -100,18 +107,20 @@ public class FuncionarioController {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static int agendar(int id_servico, int tempo, int dia, int mes) {
 		int idFun = 0;
 		try {
 			final int minTot = 600;
+			//calculo para identificar quantos horarios seriam possíveis em um dia para realizar aquele procedimento
 			float horarios = Math.ceilDiv(minTot, tempo);
 			Calendar cal = Calendar.getInstance();
+			//cria as datas para serem, usadas np select
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			LocalDateTime start_time = LocalDateTime.of(cal.get(Calendar.YEAR), mes, dia, 8, 0, 0);
 			LocalDateTime end_time;
 			int resultados = 0;
-
+			//aqui começa a rodar os horarios disponíveis para aquele serviço. verifica se tem algum funcionario disponível e que seja compativel com o serviço que ele presta
 			for (int i = 0; i < horarios; i++) {
 				end_time = start_time.plus(tempo, ChronoUnit.MINUTES);
 				System.out.println("Horário: " + start_time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
@@ -121,9 +130,10 @@ public class FuncionarioController {
 						+ "SELECT id_funcionario FROM Agendamento WHERE data BETWEEN ? AND ?"
 						+ " AND data_final BETWEEN ? AND ?)";
 
+				//converte o response do select de funcionarios
 				PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
 						ResultSet.CONCUR_READ_ONLY);
-
+				//atribui os valores para o select substituindo o ? pelos valores respectivamente
 				stmt.setInt(1, id_servico);
 				stmt.setString(2, start_time.format(format));
 				stmt.setString(3, end_time.format(format));
@@ -131,12 +141,14 @@ public class FuncionarioController {
 				stmt.setString(5, end_time.format(format));
 
 				ResultSet rs = stmt.executeQuery();
+				//adiciona os minutos do serviço para caso queira faz mais uma rodada de horarios
 				start_time = start_time.plus(tempo, ChronoUnit.MINUTES);
 
 				boolean encontrouDisponivel = false;
 				ArrayList<String> idDisponiveis = new ArrayList<String>();
 				while (rs.next()) {
 					idDisponiveis.add(String.valueOf(rs.getInt("id")));
+					//mostra os funcionários disoníveus
 					System.out.println(rs.getInt("id") + ". " + rs.getString("nome"));
 					encontrouDisponivel = true;
 				}
@@ -147,7 +159,7 @@ public class FuncionarioController {
 					Scanner scan = new Scanner(System.in);
 					System.out.println("Deseja agendar este horário? Sim/Não");
 					String esseHorario = scan.next().toLowerCase();
-
+					//VERIFICA SE O USUARIO QUER ESSE HORARIO COM OS FUNCIONARIOS DA LISTA MOSTRADA
 					if (esseHorario.equals("sim")) {
 						System.out.println("Digite o ID do funcionário que deseja que realize seu serviço:");
 						String idFunOpt = scan.next();
@@ -159,13 +171,15 @@ public class FuncionarioController {
 							Agendamento evento = new Agendamento();
 							evento.setData(start_time.format(format));
 							if (LoggedUser.getTipo() == 'F') {
-								evento.setId_cliente(1);
+								evento.setId_cliente(40);
 							} else {
 								evento.setId_cliente(LoggedUser.getID());
 							}
+							System.out.println(evento.getId_cliente());
 							evento.setId_funcionario(idFun);
 							evento.setId_servico(id_servico);
 							evento.setDataFinal(end_time.format(format));
+							//TERMINA O AGENDAMENTO
 							evento.salvar();
 							System.out.println("Confirmado!");
 							return idFun;
@@ -181,6 +195,7 @@ public class FuncionarioController {
 					}
 				}
 			}
+			LoggedUser.home();
 		} catch (Exception e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
 			AgendamentoView.agendarHorario();
@@ -188,7 +203,7 @@ public class FuncionarioController {
 		}
 		return idFun;
 	}
-
+	//cadastra um funcionário e verifica se ele é gerente (essa informação é importante para poder mostrar relatórios específicos)
 	public static void cadastro() throws Exception {
 		try (Connection connection = DAO.getConnection()) {
 			boolean continuar = true;
@@ -326,6 +341,7 @@ public class FuncionarioController {
 				servico.salvar();
 				System.out.println("Serviço salvo com sucesso!");
 			}
+			LoggedUser.home();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
 		}

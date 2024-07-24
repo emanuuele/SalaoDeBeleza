@@ -1,10 +1,12 @@
 
  QTD   NOME SERVIÇO         TOTAL MêS            MÊS       
 
- 4     xapinha              October                        
+ 3     xapinha              October                        
 
  1     xapinha              July                           
 
  1     dnwekck              July                           
 
- 3     dnwekck              October                        
+ 2     dnwekck              October                        
+
+ 2     lavagem              August                         

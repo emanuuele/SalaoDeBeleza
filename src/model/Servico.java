@@ -52,13 +52,17 @@ public class Servico implements BaseModel{
 	public void setId_cargo(int id_cargo) {
 		this.id_cargo = id_cargo;
 	}
+	// lista os registros da tb servico
 	public ArrayList<Servico> listarServicos() {
         ArrayList<Servico> servicos = new ArrayList<Servico>();
 		try {
 	        String sql = "SELECT * FROM Servico";
+	        //estabelce uma conexão com o banco e atribui ao objeto stmt que seria basicmente um "estado" onde manipula o response do metodo que vc quer utilizar (insert, update, select nesse caso)
 	        PreparedStatement stmt = DAO.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        ResultSet rs = stmt.executeQuery();
+	        //verifica se tem resultados
 	        if(rs.next()) {
+	        	//guarda o resultado em um arraylist
 	        	while (rs.next()) {
 		        	Servico servico = new Servico();
 		        	servico.setNome(rs.getString("nome"));
@@ -71,6 +75,7 @@ public class Servico implements BaseModel{
 	    }
 		return servicos;
 	}
+	//encontra um servico pelo id dele
 	public static Servico encontrarServicoPorId(int id) {
 		try {
 	        String sql = "SELECT * FROM Servico WHERE id = ?";
@@ -78,6 +83,7 @@ public class Servico implements BaseModel{
 	        stmt.setInt(1, id);
 	        ResultSet rs = stmt.executeQuery();
 	        Servico servico = new Servico();
+	        //retorna o servico encoontrado
 	        if (rs.first()) {
 	        	servico.setNome(rs.getString("nome"));
 	        	servico.setId(rs.getInt("id"));
@@ -90,6 +96,7 @@ public class Servico implements BaseModel{
 	        return null;
 	    }
 	}
+	//insere o objeto na tabela de servico
 	@Override
 	public int salvar() throws SQLException {
 		try {
@@ -106,6 +113,7 @@ public class Servico implements BaseModel{
 			return 0;
 		}
 	}
+	//altera e exclui um servico pelo seu id
 	@Override
 	public int deletar(int id) throws SQLException {
 		try {

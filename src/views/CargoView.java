@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.Cargo;
 
 public class CargoView {
+	// converte a lista de arraylist de objetos para string
 	public static ArrayList<String> listarCargos() throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		Cargo cargo = new Cargo();

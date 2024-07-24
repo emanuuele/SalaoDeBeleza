@@ -24,18 +24,22 @@ public class Login {
 			Pessoa pessoa = new Pessoa().loginUsuario(usuario);
 			MessageDigest cript = MessageDigest.getInstance("MD5");
 			byte[] hash1 = cript.digest(senha.getBytes(StandardCharsets.UTF_8));
+			//SE NÃO HÁ NENHUMA PESSOA COM AQUELE USUÁRIO, CRIA UM
 			if(pessoa != null) {
+				//VERIFICA SE A SENHA ESTA CORRETa
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
 					if(String.valueOf(pessoa.getTipo()).equals("C")) {
 						Pessoa cli = Cliente.getClientePorUsuario(usuario);
 						new LoggedUser(cli.getId(), 'C', 0);
 						ClienteView vw = new ClienteView();
 						vw.home(0);
+						//chama a home de cliente e cria um objeto login que será usada em toda a aplicação
 					} else {
 						Funcionario fun = Funcionario.getFuncionarioPorUsuario(usuario);
 						new LoggedUser(fun.getId(), 'F', fun.getEhGerente());
 						FuncionarioView vw = new FuncionarioView();
 						vw.home(0);
+						//chama a home de funcionario e cria um objeto login que será usada em toda a aplicação
 					}
 				} else {
 					System.out.println("Senha incorreta");
@@ -50,6 +54,7 @@ public class Login {
     				cli.setTipo('C');
     				cli.setSenha(Arrays.toString(hashCSenha));
     				cli.setUsuario(usuario);
+    				//chama o método de salvar o cliente no banco (só salva clientes por esse cqminho)
     				cli.salvar();
     				System.out.println("Cliente salvo com sucesso");
     				Login.login();

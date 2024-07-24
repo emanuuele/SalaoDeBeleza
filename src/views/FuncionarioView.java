@@ -26,7 +26,7 @@ public class FuncionarioView extends Menus {
 		this.servicoModel = new Servico();
 		this.cargoModel = new Cargo();
 	}
-
+//menu de opções de ações do funcionário
 	@Override
 	public void home(int id_funcionario) throws Exception {
 		try {
@@ -41,6 +41,7 @@ public class FuncionarioView extends Menus {
 			menu += "\n 7-Listar Funcionários";
 			menu += "\n 8-Listar Serviços";
 			menu += "\n 9-Sair";
+			//verifica se o funcionário pode ver relatórios
 			if (LoggedUser.getEhGerente() == 1) {
 				menu += "\n 10-Relatórios";
 			}
@@ -120,7 +121,7 @@ public class FuncionarioView extends Menus {
 			this.home(0);
 		}
 	}
-
+	// os 4  métodos abaixo são para listar o que o funcionário deseja ver (funcionártios, clientes, serviços) 
 	public int funEscolhido(String acao) {
 		String menu = "Digite o ID que deseja " + acao;
 		menu += String.format("\n %-5s %-20s %-12s %-15s %-10s%n", "ID", "Nome", "Cargo", "Celular", "Usuário");
@@ -173,7 +174,7 @@ public class FuncionarioView extends Menus {
 		Scanner scan = new Scanner(System.in);
 		return scan.nextInt();
 	}
-
+	//controla o menu de editar / excluir o que o usuário deseja de forma dinâmica
 	public void menuEditarExcluir(String tipo) throws Exception {
 		try {
 			String opt = super.menuEditarExcluir();

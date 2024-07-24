@@ -7,7 +7,9 @@ import controller.FuncionarioController;
 import model.Agendamento;
 import model.Servico;
 
+//Classe para gerenciar a interface do usuário relacionada aos agendamentos
 public class AgendamentoView {
+    // Método para exibir uma lista de agendamentos atribuidos ao funcionario
 	public ArrayList<String> meusAtendimentos(int id) throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		lista.add(String.format("%-5s %-20s %-12s %-15s %-10s%n", "ID", "Data", "Cliente", "Funcionario", "Servico"));
@@ -21,7 +23,7 @@ public class AgendamentoView {
 		}
 		return lista;
 	}
-
+	// lista os atendimentos atribuidos ao cliente 
 	public ArrayList<String> meusAgendamentos(int id) throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		lista.add(String.format("%-5s %-20s %-12s %-15s %-10s%n", "ID", "Data", "Cliente", "Funcionario", "Servico"));
@@ -68,7 +70,7 @@ public class AgendamentoView {
 				System.out.println(meses);
 				System.out.println("Digite o ID do mes que deseja fazer o procedimento");
 				String optMes = scan.next();
-				if (Integer.parseInt(optMes) < 0 || Integer.parseInt(optMes) > 12) {
+				if (Integer.parseInt(optMes) <= 0 || Integer.parseInt(optMes) > 12) {
 					throw new Exception("Digite um mês válido!");
 				}
 				System.out.println("Digite o dia do mes que deseja fazer o procedimento");
