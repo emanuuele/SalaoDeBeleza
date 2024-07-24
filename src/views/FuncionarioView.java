@@ -1,6 +1,8 @@
 package views;
 
+import java.security.MessageDigest;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -188,6 +190,11 @@ public class FuncionarioView extends Menus {
 					}
 					System.out.println("Digite o nome:");
 					String nome = scan.next();
+					System.out.println("Digite sua senha: ");
+					String senha = scan.next();
+					MessageDigest algorithm = MessageDigest.getInstance("MD5");
+					byte messageDigest[] = algorithm.digest(senha.getBytes("UTF-8"));
+					this.funcionarioModel.setSenha(Arrays.toString(messageDigest));
 					System.out.println("Digite o usuario:");
 					boolean continuar = true;
 					while (continuar) {

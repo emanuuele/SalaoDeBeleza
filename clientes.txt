@@ -12,3 +12,7 @@
  1     Padrão               October                        
 
  2     Padrão               August                         
+
+ 1     bianca               January                        
+
+ 1     emanuele             December                       
