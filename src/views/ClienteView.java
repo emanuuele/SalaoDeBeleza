@@ -18,6 +18,7 @@ public class ClienteView extends Menus{
 	public ClienteView() {
 		this.clienteModel = new Cliente();
 	}
+	//menu de opções a serem realizadas pelo cliente
 	@Override
 	public void home(int id) throws Exception {
 		String menu = "";
@@ -60,7 +61,7 @@ public class ClienteView extends Menus{
 			this.home(0);
 		}
 	}
-	
+	//tela de perfil
 	public static void configuracoes() throws Exception {
 		try {
 			Scanner scan = new Scanner(System.in);
@@ -69,6 +70,7 @@ public class ClienteView extends Menus{
 			Cliente cli = new Cliente();
 			cli.setNome(nome);
 			boolean celularValido = false;
+			// verifica se tem apenas numeros e permite tentar novamente
 			while (!celularValido) {
 				System.out.println("Digite o celular do cliente");
 				String celularInput = scan.next();
@@ -94,10 +96,11 @@ public class ClienteView extends Menus{
 			System.out.println("Digite o usuário do cliente");
 			String usuario = scan.next();
 			Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+			//verifica se tem outroo usuário com esse mesmo usuário
 			if (pessoa == null) {
 				cli.setUsuario(usuario);
-				cli.salvar();
-				System.out.println("Cliente adicionado com sucesso!");
+				cli.editar(LoggedUser.getID());
+				System.out.println("Perfil editado com sucesso");
 			} else {
 				System.out.println("Já existe alguém com este usuário");
 				System.out.println("Deseja tentar novamente? Digite Sim/Não");
@@ -106,8 +109,6 @@ public class ClienteView extends Menus{
 					configuracoes();
 				}
 			}
-			cli.editar(LoggedUser.getID());
-			System.out.println("Perfil editado com sucesso");
 			new ClienteView().home(0);
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());

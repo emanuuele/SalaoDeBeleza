@@ -6,6 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+/*
+ *  Esta classe provavelmente representa a entidade Agendamento no sistema. Embora eu não tenha o conteúdo completo, classes de modelo como esta geralmente incluem atributos como data, hora, cliente, serviço, etc., e métodos para acessar e modificar esses atributos​
+ * */
+
+
 public class Agendamento implements BaseModel{
 	private int id;
 	private String data;

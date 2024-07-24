@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 
 public class Main {
+	
+	//METODO PARA SALVAR OS CARGOS=CATEGORIAS 
 	public static void readDelimitedFile() {
         List<String> items = null;
 
@@ -32,6 +34,7 @@ public class Main {
         }
     }
 	public static void main(String[] args) throws Exception {
+		//CHAMA O METODO DE LOGIN
 		Login.login();
 	}
 

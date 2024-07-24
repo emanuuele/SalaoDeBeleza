@@ -5,6 +5,10 @@
 
  2     gus                  July                           
 
- 5     null                 October                        
+ 2     null                 October                        
 
  1     emanuele             October                        
+
+ 1     Padrão               October                        
+
+ 2     Padrão               August                         

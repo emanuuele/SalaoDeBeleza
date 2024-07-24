@@ -6,6 +6,7 @@ import model.Servico;
 
 
 public class ServicoView {
+	// converte de lista de objetos para lista de strings
 	public static ArrayList<String> listarServicos() throws Exception {
 		ArrayList<String> lista = new ArrayList<String>();
 		Servico atendimento = new Servico();
