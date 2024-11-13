@@ -130,13 +130,12 @@ public class Servico implements BaseModel{
 	@Override
 	public int editar(int id) throws SQLException {
 		try {
-    		String sql = "UPDATE Servico SET nome = ?, id_cargo = ?, valor = ?, tempo = ? WHERE id = ?";
+    		String sql = "UPDATE Servico SET nome = ?, valor = ?, tempo = ? WHERE id = ?";
         	PreparedStatement stmt = DAO.getConnection().prepareStatement(sql);
         	stmt.setString(1, this.getNome());
-            stmt.setInt(2, this.getId_cargo());
-            stmt.setDouble(3, this.getValor());
-            stmt.setInt(4, this.getTempo());
-            stmt.setInt(5, id);
+            stmt.setDouble(2, this.getValor());
+            stmt.setInt(3, this.getTempo());
+            stmt.setInt(4, id);
         	return stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());

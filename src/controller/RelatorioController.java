@@ -95,4 +95,8 @@ public class RelatorioController {
 	public String toString() {
 		return String.format("\n %-5d %-20s %-20s %-10s", this.getQtd(), this.getNome(), this.getMes(), this.getTotal() > 0 ? String.valueOf(this.getTotal()) : "");
 	}
+	
+	
+	
+	//Converte de objeto relatorio para String 
 }

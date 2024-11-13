@@ -36,6 +36,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		//CHAMA O METODO DE LOGIN
 		Login.login();
+		
 	}
 
 }

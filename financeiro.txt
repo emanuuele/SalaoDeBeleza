@@ -3,7 +3,7 @@
 
  3     xapinha              October                        
 
- 1     xapinha              July                           
+ 2     xapinha              July                           
 
  1     dnwekck              July                           
 
@@ -11,6 +11,6 @@
 
  2     lavagem              August                         
 
- 1     ovo                  January                        
-
  1     xapinha              December                       
+
+ 1     lavagem              December                       

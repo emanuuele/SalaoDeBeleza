@@ -30,6 +30,7 @@ public class Login {
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
 					if(String.valueOf(pessoa.getTipo()).equals("C")) {
 						Pessoa cli = Cliente.getClientePorUsuario(usuario);
+						//Polimorfismo login de cliente como pessoa
 						new LoggedUser(cli.getId(), 'C', 0);
 						ClienteView vw = new ClienteView();
 						vw.home(0);
