@@ -10,6 +10,7 @@ public abstract class Menus {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Digite \n 1 - Editar \n 2 - Excluir");
 		tipo = scan.next();
+		scan.close();
 		if (tipo.equals("1") || tipo.equals("2")) {
 			return tipo;
 		} else {

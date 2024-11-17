@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -22,13 +21,14 @@ import model.Funcionario;
 import model.LoggedUser;
 import model.Pessoa;
 import model.Servico;
+import views.AdapterView;
 import views.AgendamentoView;
 import views.CargoView;
-import views.ClienteView;
 import views.FuncionarioView;
 
 //classe controladora dos valores que a aplicação recebe das views e "transporta" de forma que as models consiga receber e fazer suas devidas ações no banco de dados
 public class FuncionarioController {
+	private static AdapterView userView = new AdapterView();
 	//metodo para adicionar o cliente
 	public static void addCliente() throws Exception {
 		try (Connection connection = DAO.getConnection()) {
@@ -55,7 +55,7 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
-							LoggedUser.home();
+							userView.selectedView().home(LoggedUser.getID());
 							break;
 						}
 					}
@@ -63,19 +63,18 @@ public class FuncionarioController {
 				//pede uma senha e criptografa ela
 				System.out.println("Digite a senha para o cliente");
 				String senha = scan.next();
-				MessageDigest cript = MessageDigest.getInstance("MD5");
 				byte messageDigest[] = algorithm.digest(senha.getBytes("UTF-8"));
 				cli.setSenha(Arrays.toString(messageDigest));
 				cli.setTipo('C');
 				System.out.println("Digite o usuário do cliente");
 				String usuario = scan.next();
-				Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+				Pessoa pessoa = Pessoa.loginUsuario(usuario);
 				//verifica se o usuario digitado está disponível e se sim, adicipona-o
 				if (pessoa == null) {
 					cli.setUsuario(usuario);
 					cli.salvar();
 					System.out.println("Cliente adicionado com sucesso!");
-					LoggedUser.home();
+					userView.selectedView().home(LoggedUser.getID());
 				} //se não, pergunta se quer tentar novamente
 				else {
 					System.out.println("Já existe alguém com este usuário");
@@ -119,7 +118,6 @@ public class FuncionarioController {
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			LocalDateTime start_time = LocalDateTime.of(cal.get(Calendar.YEAR), mes, dia, 8, 0, 0);
 			LocalDateTime end_time;
-			int resultados = 0;
 			//aqui começa a rodar os horarios disponíveis para aquele serviço. verifica se tem algum funcionario disponível e que seja compativel com o serviço que ele presta
 			for (int i = 0; i < horarios; i++) {
 				end_time = start_time.plus(tempo, ChronoUnit.MINUTES);
@@ -170,7 +168,7 @@ public class FuncionarioController {
 							idFun = Integer.parseInt(idFunOpt);
 							Agendamento evento = new Agendamento();
 							evento.setData(start_time.format(format));
-							if (LoggedUser.getTipo() == 'F') {
+							if (LoggedUser.getUsuarioFactory().getTipo() == 'F') {
 								evento.setId_cliente(40);
 							} else {
 								evento.setId_cliente(LoggedUser.getID());
@@ -186,16 +184,12 @@ public class FuncionarioController {
 						} catch (NumberFormatException e) {
 							throw new Exception("Digite apenas números válidos para o ID.");
 						} finally {
-							if (LoggedUser.getTipo() == 'F') {
-								new FuncionarioView().home(0);
-							} else {
-								new ClienteView().home(0);
-							}
+							userView.selectedView().home(0);
 						}
 					}
 				}
 			}
-			LoggedUser.home();
+			userView.selectedView().home(LoggedUser.getID());
 		} catch (Exception e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
 			AgendamentoView.agendarHorario();
@@ -228,14 +222,13 @@ public class FuncionarioController {
 						String opt = scan.next();
 						if (!opt.equalsIgnoreCase("sim")) {
 							continuar = false;
-							LoggedUser.home();
+							userView.selectedView().home(LoggedUser.getID());
 							break;
 						}
 					}
 				}
 				System.out.println("Digite a senha para o funcionario");
 				String senha = scan.next();
-				MessageDigest cript = MessageDigest.getInstance("MD5");
 				byte messageDigest[] = algorithm.digest(senha.getBytes("UTF-8"));
 				fun.setSenha(Arrays.toString(messageDigest));
 				fun.setTipo('F');
@@ -265,7 +258,7 @@ public class FuncionarioController {
 				}
 				System.out.println("Digite o usuário do funcionario");
 				String usuario = scan.next();
-				Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+				Pessoa pessoa = Pessoa.loginUsuario(usuario);
 				if (pessoa == null) {
 					fun.setUsuario(usuario);
 					fun.salvar();
@@ -279,7 +272,7 @@ public class FuncionarioController {
 					if (opt.toLowerCase().equals("sim")) {
 						continuar = true;
 					} else {
-						LoggedUser.home();
+						userView.selectedView().home(LoggedUser.getID());
 					}
 				}
 			}
@@ -341,7 +334,7 @@ public class FuncionarioController {
 				servico.salvar();
 				System.out.println("Serviço salvo com sucesso!");
 			}
-			LoggedUser.home();
+			userView.selectedView().home(LoggedUser.getID());
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro: " + e.getMessage());
 		}

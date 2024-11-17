@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 /*
  *  Esta classe provavelmente representa a entidade Agendamento no sistema. Embora eu não tenha o conteúdo completo, classes de modelo como esta geralmente incluem atributos como data, hora, cliente, serviço, etc., e métodos para acessar e modificar esses atributos​

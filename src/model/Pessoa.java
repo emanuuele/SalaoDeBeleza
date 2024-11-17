@@ -91,7 +91,6 @@ public class Pessoa {
 		    PreparedStatement stmtFuncionario = null;
 		    ResultSet resultSetCliente = null;
 		    ResultSet resultSetFuncionario = null;
-		    boolean existe = false;
 
 		    try {
 		        connection = DAO.getConnection();

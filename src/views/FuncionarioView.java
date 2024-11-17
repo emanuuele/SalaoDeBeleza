@@ -44,7 +44,7 @@ public class FuncionarioView extends Menus {
 			menu += "\n 8-Listar Serviços";
 			menu += "\n 9-Sair";
 			//verifica se o funcionário pode ver relatórios
-			if (LoggedUser.getEhGerente() == 1) {
+			if (Funcionario.getFuncionarioPorId(id_funcionario).getEhGerente() == 1) {
 				menu += "\n 10-Relatórios";
 			}
 			System.out.println(menu);
@@ -185,7 +185,7 @@ public class FuncionarioView extends Menus {
 			case "1": {
 				if (tipo.equals("F")) {
 					int id_fun = this.funEscolhido("editar");
-					if (this.funcionarioModel.getFuncionarioPorId(id_fun) == null) {
+					if (Funcionario.getFuncionarioPorId(id_fun) == null) {
 						throw new IllegalArgumentException("Funcionário não existe");
 					}
 					System.out.println("Digite o nome:");
@@ -199,7 +199,8 @@ public class FuncionarioView extends Menus {
 					boolean continuar = true;
 					while (continuar) {
 						String usuario = scan.next();
-						Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+						new Pessoa();
+						Pessoa pessoa = Pessoa.loginUsuario(usuario);
 						if (pessoa == null) {
 							this.funcionarioModel.setNome(nome);
 							this.funcionarioModel.setUsuario(usuario);
@@ -219,7 +220,7 @@ public class FuncionarioView extends Menus {
 					new FuncionarioView().home(id_fun);
 				} else if (tipo.equals("C")) {
 					int id_cliente = this.clienteEscolhido("editar");
-					if (this.clienteModel.getClientePorId(id_cliente) == null) {
+					if (Cliente.getClientePorId(id_cliente) == null) {
 						throw new IllegalArgumentException("Cliente não existe");
 					}
 					System.out.println("Digite o nome:");
@@ -228,7 +229,8 @@ public class FuncionarioView extends Menus {
 					boolean continuar = true;
 					while (continuar) {
 						String usuario = scan.next();
-						Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+						new Pessoa();
+						Pessoa pessoa = Pessoa.loginUsuario(usuario);
 						if (pessoa == null) {
 							this.clienteModel.setNome(nome);
 							this.clienteModel.setUsuario(usuario);
@@ -248,7 +250,7 @@ public class FuncionarioView extends Menus {
 					this.clienteModel.editar(id_cliente);
 				} else if (tipo.equals("CA")) {
 					int id_cargo = this.cargoEscolhido("editar");
-					if (this.cargoModel.encontrarCargoPorId(id_cargo) == null) {
+					if (Cargo.encontrarCargoPorId(id_cargo) == null) {
 						throw new IllegalArgumentException("Cargo não existe");
 					}
 					System.out.println("Digite o nome:");
@@ -259,7 +261,7 @@ public class FuncionarioView extends Menus {
 					System.out.println("Cargo editado com sucesso!");	
 				} else if (tipo.equals("S")) {
 					int id_servico = this.servicoEscolhido("editar");
-					if (this.servicoModel.encontrarServicoPorId(id_servico) == null) {
+					if (Servico.encontrarServicoPorId(id_servico) == null) {
 						throw new IllegalArgumentException("Serviço não existe");
 					}
 					System.out.println("Digite o nome:");
@@ -283,25 +285,25 @@ public class FuncionarioView extends Menus {
 			case "2": {
 				if (tipo.equals("F")) {
 					int id_fun = this.funEscolhido("excluir");
-					if (this.funcionarioModel.getFuncionarioPorId(id_fun) == null) {
+					if (Funcionario.getFuncionarioPorId(id_fun) == null) {
 						throw new IllegalArgumentException("Funcionário não existe");
 					}
 					this.funcionarioModel.deletar(id_fun);
 				} else if (tipo.equals("C")) {
 					int id_cliente = this.clienteEscolhido("excluir");
-					if (this.clienteModel.getClientePorId(id_cliente) == null) {
+					if (Cliente.getClientePorId(id_cliente) == null) {
 						throw new IllegalArgumentException("Funcionário não existe");
 					}
 					this.clienteModel.deletar(id_cliente);
 				} else if (tipo.equals("CA")) {
 					int id_cargo = this.cargoEscolhido("excluir");
-					if (this.cargoModel.encontrarCargoPorId(id_cargo) == null) {
+					if (Cargo.encontrarCargoPorId(id_cargo) == null) {
 						throw new IllegalArgumentException("Cargo não existe");
 					}
 					this.cargoModel.deletar(id_cargo);
 				} else if (tipo.equals("S")) {
 					int id_servico = this.servicoEscolhido("excluir");
-					if (this.servicoModel.encontrarServicoPorId(id_servico) == null) {
+					if (Servico.encontrarServicoPorId(id_servico) == null) {
 						throw new IllegalArgumentException("Serviço não existe");
 					}
 					this.servicoModel.deletar(id_servico);
