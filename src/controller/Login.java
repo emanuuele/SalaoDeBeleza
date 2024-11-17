@@ -2,10 +2,11 @@ package controller;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import factory.ClienteUsuarioFactory;
+import factory.FuncionarioUsuarioFactory;
 import model.Cliente;
 import model.Funcionario;
 import model.LoggedUser;
@@ -21,7 +22,7 @@ public class Login {
 		try {
 			System.out.println("Senha");
 			String senha = scan.next();
-			Pessoa pessoa = new Pessoa().loginUsuario(usuario);
+			Pessoa pessoa = Pessoa.loginUsuario(usuario);
 			MessageDigest cript = MessageDigest.getInstance("MD5");
 			byte[] hash1 = cript.digest(senha.getBytes(StandardCharsets.UTF_8));
 			//SE NÃO HÁ NENHUMA PESSOA COM AQUELE USUÁRIO, CRIA UM
@@ -30,13 +31,18 @@ public class Login {
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
 					if(String.valueOf(pessoa.getTipo()).equals("C")) {
 						Pessoa cli = Cliente.getClientePorUsuario(usuario);
-						new LoggedUser(cli.getId(), 'C', 0);
+						//Polimorfismo login de cliente como pessoa
+						LoggedUser.setUsuarioFactory(new ClienteUsuarioFactory());
+						LoggedUser.setID(cli.getId());
+						LoggedUser.getInstance();
 						ClienteView vw = new ClienteView();
 						vw.home(0);
 						//chama a home de cliente e cria um objeto login que será usada em toda a aplicação
 					} else {
 						Funcionario fun = Funcionario.getFuncionarioPorUsuario(usuario);
-						new LoggedUser(fun.getId(), 'F', fun.getEhGerente());
+						LoggedUser.setUsuarioFactory(new FuncionarioUsuarioFactory());
+						LoggedUser.setID(fun.getId());
+						LoggedUser.getInstance();
 						FuncionarioView vw = new FuncionarioView();
 						vw.home(0);
 						//chama a home de funcionario e cria um objeto login que será usada em toda a aplicação

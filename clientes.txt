@@ -9,10 +9,16 @@
 
  1     emanuele             October                        
 
- 1     Padrão               October                        
+ 2     Padrão               October                        
 
  2     Padrão               August                         
 
  1     bianca               January                        
 
  1     emanuele             December                       
+
+ 2     Padrão               December                       
+
+ 1     renata               July                           
+
+ 1     Emerson              August                         
