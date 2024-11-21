@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import factory.ClienteUsuarioFactory;
 import factory.FuncionarioUsuarioFactory;
+import factory.UserFactory;
 import model.Cliente;
 import model.Funcionario;
 import model.LoggedUser;
@@ -29,24 +30,7 @@ public class Login {
 			if(pessoa != null) {
 				//VERIFICA SE A SENHA ESTA CORRETa
                 if (Arrays.toString(hash1).equals(pessoa.getSenha())) {
-					if(String.valueOf(pessoa.getTipo()).equals("C")) {
-						Pessoa cli = Cliente.getClientePorUsuario(usuario);
-						//Polimorfismo login de cliente como pessoa
-						LoggedUser.setUsuarioFactory(new ClienteUsuarioFactory());
-						LoggedUser.setID(cli.getId());
-						LoggedUser.getInstance();
-						ClienteView vw = new ClienteView();
-						vw.home(0);
-						//chama a home de cliente e cria um objeto login que será usada em toda a aplicação
-					} else {
-						Funcionario fun = Funcionario.getFuncionarioPorUsuario(usuario);
-						LoggedUser.setUsuarioFactory(new FuncionarioUsuarioFactory());
-						LoggedUser.setID(fun.getId());
-						LoggedUser.getInstance();
-						FuncionarioView vw = new FuncionarioView();
-						vw.home(0);
-						//chama a home de funcionario e cria um objeto login que será usada em toda a aplicação
-					}
+					new UserFactory(pessoa);
 				} else {
 					System.out.println("Senha incorreta");
 					Login.login();
